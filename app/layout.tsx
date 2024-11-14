@@ -1,6 +1,16 @@
+
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+
+
+import AppSidebar from "@/components/app-sidebar";
+
+import { PrimeReactProvider } from 'primereact/api';
+
 import "./globals.css";
+
+import "primereact/resources/themes/lara-light-blue/theme.css";
+import AppMenuBar from "@/components/app-menu-bar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -23,12 +33,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
-    <html lang="en">
+
+
+    <html lang="en" suppressHydrationWarning={true}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <PrimeReactProvider>
+        <h1>Root Layout</h1>
+        <AppMenuBar />
+        <AppSidebar />
+          {children}          
+        </PrimeReactProvider>
       </body>
     </html>
   );
