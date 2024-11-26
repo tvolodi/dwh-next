@@ -35,10 +35,10 @@ function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
             icon: "pi pi-fw pi-hammer",
             items: [
                 {
-                    label: "DWH Settings",
+                    label: "DWH Config",
                     icon: "pi pi-fw pi-cog",
                     command: () => {
-                        router.push("/workspace/dwh-settings");
+                        router.push("/workspace/dwh-config");
                     }
                     // url: "/workspace/dwh-settings"
 
@@ -87,20 +87,12 @@ function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
                 <h1>Root Layout</h1>
                 <AppMenuBar />
                 <Splitter style={{height: "800px"}}>
-                    <SplitterPanel className="flex" size={10} minSize={3} style={{overflow: 'auto'}}>
-                        <PanelMenu model={items} ></PanelMenu>
-                        {/* <AppSidebar workspaceState={workspaceState} setWorkspaceState={setWorkspaceState} /> */}
+                    <SplitterPanel className="flex" size={5} minSize={3} style={{overflow: 'auto'}}>
+                        <PanelMenu model={items} ></PanelMenu>                        
                     </SplitterPanel>
-                    <SplitterPanel className="flex" size={50} minSize={10}>
+                    <SplitterPanel className="flex" size={60} minSize={10}>
                         {children}
-                        {/* <DataTable value={[]}>
-                            <Column field="vin" header="Vin"></Column>
-                            <Column field="year" header="Year"></Column>
-                            <Column field="brand" header="Brand"></Column>
-                            <Column field="color" header="Color"></Column>
-                        </DataTable> */}
-                    </SplitterPanel>
-                    <SplitterPanel className="flex" size={50} minSize={10}></SplitterPanel>
+                    </SplitterPanel>                    
                 </Splitter>
 
             </PrimeReactProvider>

@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas = ["dwh_meta"]
+}
+
+// DWH Meta schema
+
+model DataType {
+  Id        Int   @id @default(autoincrement())
+  Code      String @unique
+  Name      String
+  PgType    String
+
+  @@map("DataTypes")
+  @@schema("dwh_meta")
+  EntityAttribute EntityAttribute[]
+}
+
+model Module {
+  Id        Int    @id @default(autoincrement())
+  Code      String @unique
+  Name      String
+  SchemaName String
+  OltpModuleName String?
+
+  @@map("Modules")
+  @@schema("dwh_meta")
+  Entity Entity[]
+}
+
+model Entity {
+  Id        Int    @id @default(autoincrement())
+  Code      String @unique
+  Name      String
+
+  Module    Module @relation(fields: [ModuleId], references: [Id])
+  ModuleId  Int
+  
+  OltpEntityName String?
+
+  @@map("Entities")
+  @@schema("dwh_meta")
+  EntityAttribute EntityAttribute[]
+}
+
+model EntityAttribute {
+  Id        Int    @id @default(autoincrement())
+  Code      String @unique
+  Name      String
+
+  EntityId  Int
+  Entity    Entity @relation(fields: [EntityId], references: [Id])
+  
+  DataTypeId  Int
+  DataType    DataType @relation(fields: [DataTypeId], references: [Id])
+
+  IsNullable Boolean
+  IsPrimaryKey Boolean
+  IsUnique   Boolean
+  IsIndexed  Boolean
+  IsAutoIncrement Boolean
+  IsReadOnly Boolean
+
+  EntityAttribute EntityAttribute[] @relation("LinkedAttribute")
+  LinkedAttribute EntityAttribute? @relation("LinkedAttribute", fields: [LinkedAttributeId], references: [Id])
+  LinkedAttributeId Int?
+
+  @@map("EntityAttributes")
+  @@schema("dwh_meta")
+  
+}
+
+model DwhConfig {
+  Id       Int    @id @default(autoincrement())
+  Code    String @unique
+  Name    String?
+  ParamValue String?
+  ExtendedValue Json?
+  Notes   String?
+
+  @@map("DwhConfigs")
+  @@schema("dwh_meta")
+}
