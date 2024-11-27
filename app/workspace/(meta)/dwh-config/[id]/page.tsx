@@ -20,20 +20,88 @@ export default function Page({
 })
  {
 
+    // Id       Int   Id       Int    @id @default(autoincrement())
+    // Code    String @unique
+    // Name    String?
+    // ParamValue String?
+    // ExtendedValue Json?
+    // Notes   String?
+
     const formSchema = {
+        type: "object",
         "properties": {
             "id": {
+                "type": "integer"
+            },
+            "code": {
                 "type": "string"
             },
             "name": {
                 "type": "string"
+            },
+            "paramValue": {
+                "type": "string"
+            },
+            "extendedValue": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    }
+                }
+            },
+            "notes": {
+                "type": "string"
             }
+
         }
     }
 
-    const schema = person.schema;
-    const uischema = person.uischema;
-    const data = person.data;
+    const formUISchema = {
+        "type": "VerticalLayout",
+        "elements": [
+            {
+                "type": "Control",
+                "scope": "#/properties/id"
+            },
+            {
+                "type": "Control",
+                "scope": "#/properties/code"
+            },
+            {
+                "type": "Control",
+                "scope": "#/properties/name"
+            },
+            {
+                "type": "Control",
+                "scope": "#/properties/paramValue"
+            },
+            {
+                "type": "Control",
+                "scope": "#/properties/extendedValue"
+            },
+            {
+                "type": "Control",
+                "scope": "#/properties/notes"
+            }
+        ]
+    }
+
+    const formData = {
+        "id": 1,
+        "code": "code 1",
+        "name": "name 1",
+        "paramValue": "param1 Value",
+        "extendedValue": "extended Value 1",
+        "notes": "notes 1"
+    }
+
+    const schema = formSchema; // person.schema;
+    const uischema = formUISchema; // person.uischema;
+    const data = formData; //  person.data;
 
     console.log('Schema: ', schema);
     console.log('UISchema: ', uischema);
