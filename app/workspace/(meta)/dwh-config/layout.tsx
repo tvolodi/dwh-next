@@ -1,72 +1,51 @@
 'use client';
 
 import { PrismaClient } from "@prisma/client";
-import { redirect, useRouter } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { Splitter, SplitterPanel } from "primereact/splitter";
 import { Toolbar } from "primereact/toolbar";
-import React, { useEffect } from "react";
+import React, { useEffect, createContext } from "react";
 
 import useSWR from "swr";
+
+export const DwhConfigPageContext = createContext({});
 
 const fetcher = (...args: [RequestInfo, RequestInit?]) => fetch(...args).then((res) => res.json());
 
 const prisma = new PrismaClient();
 
-function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
+function Layout({ children }: Readonly<{ children: React.ReactNode }>, params: any) {
+
+    const urlParams = useSearchParams();
+    console.log("Layout URL Params: ", urlParams);
+
+    console.log("Params: ", params);
+    if(params == undefined) {
+        params = { param1: 0 }
+    }
 
     const router = useRouter();
     
     const [selectedData, setSelectedData] = React.useState<any>(null);
+    const [ detailsMode, setDetailsMode ] = React.useState("view");
 
     const { data, error, isLoading } = useSWR("/workspace/dwh-config/api/", fetcher);
     if(isLoading) return <div>Loading...</div>
     if(error) return <div>Error loading data</div>
 
-    const toolBarItems = [
-        {
-            label: "Add",
-            icon: "pi pi-plus",
-            command: () => {
-                console.log("Add clicked");
-            }
-        },
-        {
-            label: "Update",
-            icon: "pi pi-pencil",
-            command: () => {
-                console.log("Update clicked");
-            }            
-        },
-        {
-            label: "Delete",
-            icon: "pi pi-trash",
-            command: () => {
-                console.log("Delete clicked");
-            }            
-        },
-        {
-            label: "Refresh",
-            icon: "pi pi-refresh",
-            command: () => {
-                console.log("Refresh clicked");
-            }
-        },
-        {
-            label: "Search",
-            icon: "pi pi-search",
-            command: () => {
-                console.log("Search clicked");
-            }
-        }
-    ]
-
     const toolbarLeft = (
         <React.Fragment>
-            <Button icon="pi pi-plus" className="p-button-success p-mr-2" />
+            <Button icon="pi pi-plus" className="p-button-success p-mr-2" onClick={
+                () => {
+                    console.log("Add clicked");
+                    router.push("/workspace/dwh-config/0?mode=add");
+                    setDetailsMode("add");
+                }
+            } />
             <Button icon="pi pi-pencil" className="p-button-help p-mr-2" />
             <Button icon="pi pi-trash" className="p-button-danger p-mr-2" />
             <Button icon="pi pi-refresh" className="p-button-info p-mr-2" />
@@ -102,6 +81,7 @@ function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
                                 setSelectedData(e.value)
 
                                 router.push(`/workspace/dwh-config/${e.value.id}`);
+
                             }
 
                         }}
@@ -119,15 +99,21 @@ function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
                         icon="pi pi-info"
                         className="p-button-info p-mr-2"
                         onClick={() => {
-                            redirect("/workspace/dwh-config/1")
+                            redirect("/workspace/dwh-config/1?search=aaa&param1=1")
                         }}
                     />
                     </div>
                 </SplitterPanel>
                 <SplitterPanel className="flex" size={10} minSize={6} style={{ overflow: 'auto' }}>
-                    <Card title="Details">
-                        {children}
-                    </Card>
+                    <DwhConfigPageContext.Provider value={{ 
+                        data: { selectedData, setSelectedData}, 
+                        detailsMode: { detailsMode: detailsMode, setDetailsMode: setDetailsMode }
+                    }}
+                    >
+                        <Card>
+                            {children}
+                        </Card>
+                    </DwhConfigPageContext.Provider>
                 </SplitterPanel>
             </Splitter>
         </>
