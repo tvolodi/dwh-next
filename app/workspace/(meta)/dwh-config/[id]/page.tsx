@@ -8,7 +8,7 @@ import { materialRenderers, materialCells } from '@jsonforms/material-renderers'
 
 import { FloatLabel } from 'primereact/floatlabel';
 import { InputText } from 'primereact/inputtext';
-import { useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import React from 'react';
 import { Button } from 'primereact/button';
 import { Toolbar } from 'primereact/toolbar';
@@ -18,6 +18,7 @@ import { Badge } from 'primereact/badge';
 import { PageMode } from '@/lib/common/enums';
 
 import { useRouter } from 'next/navigation';
+import useSWR from 'swr';
 
 const fetcher = (...args: [RequestInfo, RequestInit?]) => fetch(...args).then((res) => res.json());
 
@@ -39,20 +40,29 @@ export default function Page({
     // Notes   String?
 
     const router = useRouter();
+    const urlSearchParams = useSearchParams();
+    const urlParams = useParams();
+    
+    let id = 0;
 
-    const urlParams = useSearchParams();
+    if(urlParams !== null) {
+        id = parseInt(urlParams.id as string);
+    }
+    
+    console.log('URL Params: ', urlParams);
+    
 
     // Use the parent page context to determine the details mode if it is master-detail page
     const parentPageContext : any = React.useContext(DwhConfigPageContext);
 
-    console.log('URL Params: ', urlParams);
+    console.log('URL Params: ', urlSearchParams);
     console.log('Parent Page Context: ', parentPageContext);
 
     // Get page mode from URL
     let pageMode: string|null = PageMode.VIEW;
-    if (urlParams !== null) {
-        if (urlParams.has('mode')) {
-            pageMode = urlParams.get('mode');
+    if (urlSearchParams !== null) {
+        if (urlSearchParams.has('mode')) {
+            pageMode = urlSearchParams.get('mode');
             // if(parentPageContext !== null && parentPageContext !== undefined) {
             //     parentPageContext.detailsMode.setDetailsMode(mode);
             // }
@@ -66,22 +76,41 @@ export default function Page({
 
     // Determine mode from URL
 
+    let detailsData = {};
+    if(id === 0) {
+        console.log('Adding new record');
+        detailsData = {
+            "Id": "",
+            "Code": "",
+            "Name": "",
+            "ParamValue": "",
+            "ExtendedValue": "",
+            "Notes": ""
+        }
+    } else {
+        const { data, error, isLoading } = useSWR(`/api/dwh-config/details/${id}`, fetcher);
+        if(isLoading) return <div>Loading...</div>
+        if(error) return <div>Error loading data</div>
+        detailsData = data;
+        console.log('Details Data: ', data);
+    }
+
     const formSchema = {
         type: "object",
         "properties": {
-            "id": {
+            "Id": {
                 "type": "integer"
             },
-            "code": {
+            "Code": {
                 "type": "string"
             },
-            "name": {
+            "Name": {
                 "type": "string"
             },
-            "paramValue": {
+            "ParamValue": {
                 "type": "string"
             },
-            "extendedValue": {
+            "ExtendedValue": {
                 "type": "object",
                 "properties": {
                     "key": {
@@ -92,7 +121,7 @@ export default function Page({
                     }
                 }
             },
-            "notes": {
+            "Notes": {
                 "type": "string"
             }
 
@@ -104,43 +133,43 @@ export default function Page({
         "elements": [
             {
                 "type": "Control",
-                "scope": "#/properties/id"
+                "scope": "#/properties/Id"
             },
             {
                 "type": "Control",
-                "scope": "#/properties/code"
+                "scope": "#/properties/Code"
             },
             {
                 "type": "Control",
-                "scope": "#/properties/name"
+                "scope": "#/properties/Name"
             },
             {
                 "type": "Control",
-                "scope": "#/properties/paramValue"
+                "scope": "#/properties/ParamValue"
             },
             {
                 "type": "Control",
-                "scope": "#/properties/extendedValue"
+                "scope": "#/properties/ExtendedValue"
             },
             {
                 "type": "Control",
-                "scope": "#/properties/notes"
+                "scope": "#/properties/Notes"
             }
         ]
     }
 
-    const formData = {
-        "id": 1,
-        "code": "code 1",
-        "name": "name 1",
-        "paramValue": "param1 Value",
-        "extendedValue": "extended Value 1",
-        "notes": "notes 1"
-    }
+    // const formData = {
+    //     "Id": detailsMode === PageMode.ADD ? 0 : 1,
+    //     "Code": "code 1",
+    //     "Name": "name 1",
+    //     "ParamValue": "param1 Value",
+    //     "ExtendedValue": "extended Value 1",
+    //     "Notes": "notes 1"
+    // }
 
     const schema = formSchema; // person.schema;
     const uischema = formUISchema; // person.uischema;
-    const data = formData; //  person.data;
+    // const data = formData; //  person.data;
 
     // console.log('Schema: ', schema);
     // console.log('UISchema: ', uischema);
@@ -159,12 +188,19 @@ export default function Page({
                         className="p-mr-2"/>
                     <Button icon="pi pi-save" className="p-button-success p-mr-2" onClick={
                         () => {
+                            console.log('Saving Data: ', detailsData);
+                            let method = 'POST';
+                            if(detailsMode === PageMode.EDIT) {
+                                method = 'PUT';
+                            } else if(detailsMode === PageMode.DELETE) {
+                                method = 'DELETE';
+                            }
                             fetch('/workspace/dwh-config/api/', {
-                                method: 'POST',
+                                method: method,
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
-                                body: JSON.stringify(formData),
+                                body: JSON.stringify(detailsData),
                             }
                             )
                             // if (parentPageContext !== null && parentPageContext !== undefined)
@@ -193,7 +229,7 @@ export default function Page({
             <JsonForms
                 schema={schema}
                 uischema={uischema}
-                data={data}
+                data={detailsData}
                 renderers={materialRenderers}
                 cells={materialCells}
                 onChange={({ data, errors }) => console.log('Data: ', data, 'Errors: ', errors)}

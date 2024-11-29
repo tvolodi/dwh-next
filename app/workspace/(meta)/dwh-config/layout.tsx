@@ -8,7 +8,7 @@ import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { Splitter, SplitterPanel } from "primereact/splitter";
 import { Toolbar } from "primereact/toolbar";
-import React, { useEffect, createContext } from "react";
+import React, { useEffect, createContext, use, useMemo } from "react";
 
 import useSWR from "swr";
 
@@ -20,20 +20,34 @@ const prisma = new PrismaClient();
 
 function Layout({ children }: Readonly<{ children: React.ReactNode }>, params: any) {
 
-    const urlParams = useSearchParams();
-    console.log("Layout URL Params: ", urlParams);
 
-    console.log("Params: ", params);
+    const urlParams = useSearchParams();
+
     if(params == undefined) {
         params = { param1: 0 }
     }
 
     const router = useRouter();
-    
-    const [selectedData, setSelectedData] = React.useState<any>(null);
-    const [ detailsMode, setDetailsMode ] = React.useState("view");
 
+    const [selectedData, setSelectedData] = React.useState<any>(null);
+
+    useEffect( () => {
+        // Set the selected data to the first row in the table
+        fetch(`${window.location.origin}/workspace/dwh-config/api/`)
+            .then((res) => res.json())
+            .then((data) => {            
+                if(data !== undefined && data !== null && data.length > 0) {
+                    setSelectedData(data[0]);
+                    return data[0];
+                } else {
+                    setSelectedData(null);
+                }
+            })
+    }, []);
+
+    // Load the data from the API using SWR hook (with caching and so on)
     const { data, error, isLoading } = useSWR("/workspace/dwh-config/api/", fetcher);
+    
     if(isLoading) return <div>Loading...</div>
     if(error) return <div>Error loading data</div>
 
@@ -43,7 +57,6 @@ function Layout({ children }: Readonly<{ children: React.ReactNode }>, params: a
                 () => {
                     console.log("Add clicked");
                     router.push("/workspace/dwh-config/0?mode=add");
-                    setDetailsMode("add");
                 }
             } />
             <Button icon="pi pi-pencil" className="p-button-help p-mr-2" />
@@ -52,18 +65,6 @@ function Layout({ children }: Readonly<{ children: React.ReactNode }>, params: a
             <Button icon="pi pi-search" className="p-button-warning p-mr-2" />
         </React.Fragment>
     )
-
-    const testDataTableData = [
-        {
-            id: 1,
-            name: "John Doe",
-        },
-        {
-            id: 2,
-            name: "Jane Doe",
-        }
-    ]
-
 
     return (
         <>            
@@ -76,44 +77,26 @@ function Layout({ children }: Readonly<{ children: React.ReactNode }>, params: a
                         value={data}
                         selection={selectedData}
                         onSelectionChange={(e) => {
-                            console.log("Selected Data: ", e.value)
                             if (e.value !== null && e.value !== undefined) {
-                                setSelectedData(e.value)
-
-                                router.push(`/workspace/dwh-config/${e.value.id}`);
-
+                                setSelectedData(e.value)                                
+                                router.push(`/workspace/dwh-config/${e.value.Id}`);
                             }
-
                         }}
-                        dataKey="id"
+                        dataKey="Id"
                     >
-                        <Column field="id" header="ID"></Column>
-                        <Column field="code" header="Code"></Column>
-                        <Column field="name" header="Name"></Column>
-                        <Column field="paramValue" header="Param Value"></Column>
+                        <Column field="Id" header="ID"></Column>
+                        <Column field="Code" header="Code"></Column>
+                        <Column field="Name" header="Name"></Column>
+                        <Column field="ParamValue" header="Param Value"></Column>
                         <Column field="ExtendedValue" header="Extended Value"></Column>
-                        <Column field="notes" header="Notes"></Column>
+                        <Column field="Notes" header="Notes"></Column>
                     </DataTable>
-                    <Button
-                        label="Details"
-                        icon="pi pi-info"
-                        className="p-button-info p-mr-2"
-                        onClick={() => {
-                            redirect("/workspace/dwh-config/1?search=aaa&param1=1")
-                        }}
-                    />
-                    </div>
+                </div>
                 </SplitterPanel>
                 <SplitterPanel className="flex" size={10} minSize={6} style={{ overflow: 'auto' }}>
-                    <DwhConfigPageContext.Provider value={{ 
-                        data: { selectedData, setSelectedData}, 
-                        detailsMode: { detailsMode: detailsMode, setDetailsMode: setDetailsMode }
-                    }}
-                    >
-                        <Card>
-                            {children}
-                        </Card>
-                    </DwhConfigPageContext.Provider>
+                    <Card>
+                        {children}
+                    </Card>
                 </SplitterPanel>
             </Splitter>
         </>
