@@ -9,7 +9,7 @@ import { materialRenderers, materialCells } from '@jsonforms/material-renderers'
 import { FloatLabel } from 'primereact/floatlabel';
 import { InputText } from 'primereact/inputtext';
 import { useParams, useSearchParams } from 'next/navigation';
-import React from 'react';
+import React, { use, useEffect, useRef } from 'react';
 import { Button } from 'primereact/button';
 import { Toolbar } from 'primereact/toolbar';
 import { DwhConfigPageContext } from '../layout';
@@ -19,6 +19,9 @@ import { PageMode } from '@/lib/common/enums';
 
 import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
+import { debug } from 'console';
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
+import { Toast } from 'primereact/toast';
 
 const fetcher = (...args: [RequestInfo, RequestInit?]) => fetch(...args).then((res) => res.json());
 
@@ -32,13 +35,6 @@ export default function Page({
 })
  {
 
-    // Id       Int   Id       Int    @id @default(autoincrement())
-    // Code    String @unique
-    // Name    String?
-    // ParamValue String?
-    // ExtendedValue Json?
-    // Notes   String?
-
     const router = useRouter();
     const urlSearchParams = useSearchParams();
     const urlParams = useParams();
@@ -51,55 +47,76 @@ export default function Page({
     
     console.log('URL Params: ', urlParams);
     
-
     // Use the parent page context to determine the details mode if it is master-detail page
     const parentPageContext : any = React.useContext(DwhConfigPageContext);
 
     console.log('URL Params: ', urlSearchParams);
     console.log('Parent Page Context: ', parentPageContext);
 
-    // Get page mode from URL
-    let pageMode: string|null = PageMode.VIEW;
-    if (urlSearchParams !== null) {
-        if (urlSearchParams.has('mode')) {
-            pageMode = urlSearchParams.get('mode');
-            // if(parentPageContext !== null && parentPageContext !== undefined) {
-            //     parentPageContext.detailsMode.setDetailsMode(mode);
-            // }
-            // console.log('Mode: ', mode);
-        }
+    function getDetailsMode() {
+        if(urlSearchParams) {
+            if(urlSearchParams.has('mode')) {                
+                return urlSearchParams.get('mode');
+            }
+        } 
+        return PageMode.VIEW;
     }
+
+    // Get page mode from URL
+    let pageMode: string|null = getDetailsMode()    
 
     console.log('Page Mode: ', pageMode);
 
     const [detailsMode, setDetailsMode] = React.useState(pageMode);
+    const [changedDetailsData, setChangedDetailsData] = React.useState({} as any);
+    const [ formIsReadOnly, setFormIsReadOnly ] = React.useState(() => {
+        if(pageMode === PageMode.VIEW || pageMode === PageMode.DELETE) {
+            return true;
+        }
+        return false;
+    });
 
     // Determine mode from URL
 
-    let detailsData = {};
-    if(id === 0) {
-        console.log('Adding new record');
-        detailsData = {
-            "Id": "",
-            "Code": "",
-            "Name": "",
-            "ParamValue": "",
-            "ExtendedValue": "",
-            "Notes": ""
+    useEffect(() => {
+        console.log('Page Mode from UseEffect: ', pageMode);
+        if(pageMode === PageMode.VIEW || pageMode === PageMode.DELETE) {
+            setFormIsReadOnly(true);
+        } else {
+            setFormIsReadOnly(false);
         }
-    } else {
-        const { data, error, isLoading } = useSWR(`/api/dwh-config/details/${id}`, fetcher);
-        if(isLoading) return <div>Loading...</div>
-        if(error) return <div>Error loading data</div>
-        detailsData = data;
-        console.log('Details Data: ', data);
-    }
+
+        if(id === 0) {
+            console.log('Adding new record');
+            setChangedDetailsData({
+                "Id": "",
+                "Code": "",
+                "Name": "",
+                "ParamValue": "",
+                "ExtendedValue": "",
+                "Notes": ""
+            })
+        } else {
+
+            fetch(`/api/dwh-config/details/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log('Data from useEffect: ', data);
+                    setChangedDetailsData(data);
+                })
+        }
+    }, [urlSearchParams])
 
     const formSchema = {
         type: "object",
         "properties": {
             "Id": {
-                "type": "integer"
+                "type": ["integer", "string"]
             },
             "Code": {
                 "type": "string"
@@ -111,15 +128,18 @@ export default function Page({
                 "type": "string"
             },
             "ExtendedValue": {
-                "type": "object",
-                "properties": {
-                    "key": {
-                        "type": "string"
-                    },
-                    "value": {
-                        "type": "string"
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "code": {
+                            "type": "string"
+                        },
+                        "value": {
+                            "type": "string"
+                        }
                     }
-                }
+                }                
             },
             "Notes": {
                 "type": "string"
@@ -133,7 +153,10 @@ export default function Page({
         "elements": [
             {
                 "type": "Control",
-                "scope": "#/properties/Id"
+                "scope": "#/properties/Id",
+                "options": {
+                    "readOnly": true
+                }
             },
             {
                 "type": "Control",
@@ -149,7 +172,7 @@ export default function Page({
             },
             {
                 "type": "Control",
-                "scope": "#/properties/ExtendedValue"
+                "scope": "#/properties/ExtendedValue",             
             },
             {
                 "type": "Control",
@@ -158,22 +181,39 @@ export default function Page({
         ]
     }
 
-    // const formData = {
-    //     "Id": detailsMode === PageMode.ADD ? 0 : 1,
-    //     "Code": "code 1",
-    //     "Name": "name 1",
-    //     "ParamValue": "param1 Value",
-    //     "ExtendedValue": "extended Value 1",
-    //     "Notes": "notes 1"
-    // }
+    async function handleSave() {
+        console.log('Saving Data: ', changedDetailsData);
+        let method = 'POST';
+        if(pageMode === PageMode.EDIT) {
+            method = 'PUT';            
+        } else if(pageMode === PageMode.DELETE) {
+            method = 'DELETE';
+        }
+        console.log("Details mode from handle save = ", detailsMode);
+        console.log('Method from handleSave: ', method);
+
+        const res = await fetch('/workspace/dwh-config/api/', {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(changedDetailsData),
+        });
+
+        console.log('Response from save: ', res);
+        const data = await res.json();
+    
+        console.log('Data from save: ', data);
+        
+        // Trigger re-fetch
+        parentPageContext.setIsNeededUpdate(true);
+    
+        // Redirect to updated details page
+        router.push(`/workspace/dwh-config/${data.Id}?mode=${PageMode.VIEW}`);
+    }
 
     const schema = formSchema; // person.schema;
     const uischema = formUISchema; // person.uischema;
-    // const data = formData; //  person.data;
-
-    // console.log('Schema: ', schema);
-    // console.log('UISchema: ', uischema);
-    // console.log('Data: ', data);
 
     const toolbarLeft = (
         <React.Fragment>            
@@ -186,53 +226,78 @@ export default function Page({
                         value="Editing"
                         severity="info"
                         className="p-mr-2"/>
-                    <Button icon="pi pi-save" className="p-button-success p-mr-2" onClick={
-                        () => {
-                            console.log('Saving Data: ', detailsData);
-                            let method = 'POST';
-                            if(detailsMode === PageMode.EDIT) {
-                                method = 'PUT';
-                            } else if(detailsMode === PageMode.DELETE) {
-                                method = 'DELETE';
-                            }
-                            fetch('/workspace/dwh-config/api/', {
-                                method: method,
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(detailsData),
-                            }
-                            )
-                            // if (parentPageContext !== null && parentPageContext !== undefined)
-                            //     console.log('Saving Data: ', data);
-                            //     parentPageContext.detailsMode.setDetailsMode({ detailsMode: PageMode.VIEW });
-                            router.push(`/workspace/dwh-config/0?mode=${PageMode.VIEW}`);
-                        }
-                    }/>
+                    <Button icon="pi pi-save" className="p-button-success p-mr-2" onClick={handleSave}/>
                 </>
             ) : null
             }
             <Button icon="pi pi-pencil" className="p-button-help p-mr-2" onClick={
                 () => {
-                    router.push(`/workspace/dwh-config/0?mode=${PageMode.EDIT}`);
+                    router.push(`/workspace/dwh-config/${id}?mode=${PageMode.EDIT}`);
                 }
             }/>
-            <Button icon="pi pi-trash" className="p-button-danger p-mr-2" />
+            <Button icon="pi pi-trash" className="p-button-danger p-mr-2" onClick={                
+                () => {
+                    confirmDelete();                    
+                }
+            }/>
         </React.Fragment>
     )
 
+    const toast = useRef<Toast>(null);
+
+    const confirmDelete = () => {
+        confirmDialog({
+            message: 'Are you sure you want to delete this record?',
+            header: 'Delete Confirmation',
+            icon: 'pi pi-info-circle',
+            defaultFocus: 'reject',
+            accept: async () => {
+
+                alert('You have accepted');
+
+                pageMode = PageMode.DELETE;
+                await handleSave();
+
+                if(toast && toast.current && toast.current.show) {
+                    toast.current?.show({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted' });
+                }
+                router.push(`/workspace/dwh-config/`);
+                
+
+            },
+            reject: () => {
+                if(toast && toast.current && toast.current.show) {
+                    toast.current?.show({ severity: 'info', summary: 'Rejected', detail: 'You have rejected' });
+                }
+                alert('You have rejected');
+            },
+            acceptClassName: 'p-button-danger',
+        })
+    }
+
     return (
         <div>
+            <Button onClick={() => {
+                        parentPageContext.setIsNeededUpdate(true);
+                    }}>Refresh</Button>
             <h1><u>DWH Config Details:</u></h1>
             <Toolbar start={toolbarLeft} />
+            <Toast ref={toast} />
+            <ConfirmDialog />
 
+            {/* <h3>{`${JSON.stringify(detailsData)}`}</h3> */}
             <JsonForms
                 schema={schema}
                 uischema={uischema}
-                data={detailsData}
+                data={changedDetailsData}
                 renderers={materialRenderers}
                 cells={materialCells}
-                onChange={({ data, errors }) => console.log('Data: ', data, 'Errors: ', errors)}
+                onChange={({ data, errors }) => {
+                    console.log('Data: ', data, 'Errors: ', errors);
+                    setChangedDetailsData(data);
+                }}
+                readonly={formIsReadOnly}
+
             />                
         </div>
     );

@@ -1,7 +1,7 @@
 'use client';
 
 import { PrismaClient } from "@prisma/client";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
+import { redirect, useRouter, useSearchParams, useParams } from "next/navigation";
 import { Button } from "primereact/button";
 import { Card } from "primereact/card";
 import { Column } from "primereact/column";
@@ -9,7 +9,7 @@ import { DataTable } from "primereact/datatable";
 import { Splitter, SplitterPanel } from "primereact/splitter";
 import { Toolbar } from "primereact/toolbar";
 import React, { useEffect, createContext, use, useMemo } from "react";
-
+// import { useHistory } from 'react-router-dom'
 import useSWR from "swr";
 
 export const DwhConfigPageContext = createContext({});
@@ -21,32 +21,43 @@ const prisma = new PrismaClient();
 function Layout({ children }: Readonly<{ children: React.ReactNode }>, params: any) {
 
 
-    const urlParams = useSearchParams();
+    const urlSearchParams = useSearchParams();
 
     if(params == undefined) {
         params = { param1: 0 }
     }
 
+    let id = "";
+    const urlParams = useParams();
+    if(urlParams !== null) {
+        id = urlParams.id as string;
+    }
+
     const router = useRouter();
 
+    const parentPageContext : any = React.useContext(DwhConfigPageContext);
+
+    const test = ():any=>{
+      window.focus()
+    }
     const [selectedData, setSelectedData] = React.useState<any>(null);
+    const [ isNeededUpdate, setIsNeededUpdate ] = React.useState<boolean>(false);
+    const [ objectId, setObjectId ] = React.useState<string>(id);
+    
+    const { data, error, isLoading, mutate } = useSWR("/workspace/dwh-config/api/", fetcher);
 
-    useEffect( () => {
-        // Set the selected data to the first row in the table
-        fetch(`${window.location.origin}/workspace/dwh-config/api/`)
-            .then((res) => res.json())
-            .then((data) => {            
-                if(data !== undefined && data !== null && data.length > 0) {
-                    setSelectedData(data[0]);
-                    return data[0];
-                } else {
-                    setSelectedData(null);
-                }
-            })
-    }, []);
+    useEffect(() => {
 
+        if (isNeededUpdate) {
+          mutate(); // Trigger a refetch
+          setIsNeededUpdate(false); // Reset the update flag
+        }
+      }, [isNeededUpdate, 
+        mutate
+    ]);
+
+    
     // Load the data from the API using SWR hook (with caching and so on)
-    const { data, error, isLoading } = useSWR("/workspace/dwh-config/api/", fetcher);
     
     if(isLoading) return <div>Loading...</div>
     if(error) return <div>Error loading data</div>
@@ -72,31 +83,47 @@ function Layout({ children }: Readonly<{ children: React.ReactNode }>, params: a
                 <SplitterPanel className="flex" size={35} minSize={6} style={{ overflow: 'auto' }}>
                 <div className="card">
                     <Toolbar start={toolbarLeft}></Toolbar>
+                    {JSON.stringify(isNeededUpdate)}
+                    <Button onClick={() => {
+                        setIsNeededUpdate(true);
+                    }}>Refresh</Button>
                     <DataTable
                         selectionMode={"single"}
                         value={data}
                         selection={selectedData}
+                        paginator
+                        rows={10}
+                        rowsPerPageOptions={[10, 15, 30, 50]}
                         onSelectionChange={(e) => {
                             if (e.value !== null && e.value !== undefined) {
+                                console.log("Selected Data 1: ", e.value);
                                 setSelectedData(e.value)                                
                                 router.push(`/workspace/dwh-config/${e.value.Id}`);
+                            } else {
+                                console.log("Selected Data 2: ", e.value, e);
+                                console.log("Selected Data 3: ", selectedData);
+                                router.push(`/workspace/dwh-config/${selectedData.Id}`);
                             }
                         }}
+                        onRowSelect={(e) => {
+                            console.log("Row Selected: ", e);
+                        }}                        
                         dataKey="Id"
                     >
                         <Column field="Id" header="ID"></Column>
                         <Column field="Code" header="Code"></Column>
                         <Column field="Name" header="Name"></Column>
                         <Column field="ParamValue" header="Param Value"></Column>
-                        <Column field="ExtendedValue" header="Extended Value"></Column>
+                        {/* <Column field="ExtendedValue" header="Extended Value"></Column> */}
                         <Column field="Notes" header="Notes"></Column>
                     </DataTable>
                 </div>
                 </SplitterPanel>
                 <SplitterPanel className="flex" size={10} minSize={6} style={{ overflow: 'auto' }}>
-                    <Card>
-                        {children}
-                    </Card>
+                <DwhConfigPageContext.Provider value={{ selectedData, setSelectedData, isNeededUpdate, setIsNeededUpdate, objectId, setObjectId, test }}>                        <Card>
+                            {children}
+                        </Card>
+                    </DwhConfigPageContext.Provider>
                 </SplitterPanel>
             </Splitter>
         </>
