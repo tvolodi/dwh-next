@@ -82,6 +82,19 @@ model EntityAttribute {
   
 }
 
+model JsonSchemas {
+  Id       Int    @id @default(autoincrement())
+  Category String
+  Code    String @unique
+  Name    String?
+  Schema  Json
+  Notes   String?
+
+  @@map("JsonSchemas")
+  @@schema("dwh_meta")
+}
+
+// DWH configuration paramaters
 model DwhConfig {
   Id       Int    @id @default(autoincrement())
   Code    String @unique

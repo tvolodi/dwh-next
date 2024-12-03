@@ -1,0 +1,135 @@
+{
+  "id": "879a1ce9-57b7-426a-a4cf-026f3d11bd0f",
+  "prevId": "fbaa9390-4d46-41b8-986d-0b536528f7fd",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "dwh-meta.DwhConfigs": {
+      "name": "DwhConfigs",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ParamValue": {
+          "name": "ParamValue",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ExtendedValue": {
+          "name": "ExtendedValue",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "DwhConfigs_Code_unique": {
+          "name": "DwhConfigs_Code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "dwh-meta.JsonSchemas": {
+      "name": "JsonSchemas",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "SchemaName": {
+          "name": "SchemaName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Schema": {
+          "name": "Schema",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "JsonSchemas_Code_unique": {
+          "name": "JsonSchemas_Code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {
+    "dwh-meta": "dwh-meta"
+  },
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

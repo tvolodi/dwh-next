@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+message Empty {}
+
+message WpfConfig {
+    integer Id = 1;
+    string Code = 2;
+    string Name = 3;
+    string ParamValue = 4;
+    string Note = 5;    
+}
+
+message WpfConfigList {
+    repeated WpfConfig WpfConfigs = 1;
+}
+
+service WpfConfigService {
+    rpc AddConfig (WpfConfig) returns (WpfConfig) {}
+    rpc UpdateConfig (WpfConfig) returns (WpfConfig) {}
+    rpc DeleteConfig (WpfConfig) returns (Empty) {}
+
+    rpc GetAllConfigs (Empty) returns (WpfConfigList) {}
+    rpc GetConfig (WpfConfig) returns (WpfConfig) {}
+    rpc GetConfigs (WpfConfig) returns (stream WpfConfig) {}
+}

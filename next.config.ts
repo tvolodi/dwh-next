@@ -16,6 +16,9 @@ module.exports = {
 const nextConfig: NextConfig = {
   /* config options here */
   // basePath: "/workspace",
+
+  serverComponentsExternalPackages: [
+  ]
 };
 
 export default nextConfig;

@@ -37,11 +37,8 @@ function Layout({ children }: Readonly<{ children: React.ReactNode }>, params: a
 
     const parentPageContext : any = React.useContext(DwhConfigPageContext);
 
-    const test = ():any=>{
-      window.focus()
-    }
     const [selectedData, setSelectedData] = React.useState<any>(null);
-    const [ isNeededUpdate, setIsNeededUpdate ] = React.useState<boolean>(false);
+    const [ isNeededUpdate, setIsNeededUpdate ] = React.useState<boolean>(true);
     const [ objectId, setObjectId ] = React.useState<string>(id);
     
     const { data, error, isLoading, mutate } = useSWR("/workspace/dwh-config/api/", fetcher);
@@ -120,7 +117,7 @@ function Layout({ children }: Readonly<{ children: React.ReactNode }>, params: a
                 </div>
                 </SplitterPanel>
                 <SplitterPanel className="flex" size={10} minSize={6} style={{ overflow: 'auto' }}>
-                <DwhConfigPageContext.Provider value={{ selectedData, setSelectedData, isNeededUpdate, setIsNeededUpdate, objectId, setObjectId, test }}>                        <Card>
+                <DwhConfigPageContext.Provider value={{ selectedData, setSelectedData, isNeededUpdate, setIsNeededUpdate, objectId, setObjectId }}>                        <Card>
                             {children}
                         </Card>
                     </DwhConfigPageContext.Provider>
