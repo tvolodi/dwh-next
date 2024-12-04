@@ -45,13 +45,13 @@ export default function Page({
         id = parseInt(urlParams.id as string);
     }
     
-    console.log('URL Params: ', urlParams);
+    // console.log('URL Params: ', urlParams);
     
     // Use the parent page context to determine the details mode if it is master-detail page
     const parentPageContext : any = React.useContext(DwhConfigPageContext);
 
-    console.log('URL Params: ', urlSearchParams);
-    console.log('Parent Page Context: ', parentPageContext);
+    // console.log('URL Params: ', urlSearchParams);
+    // console.log('Parent Page Context: ', parentPageContext);
 
     function getDetailsMode() {
         if(urlSearchParams) {
@@ -65,7 +65,7 @@ export default function Page({
     // Get page mode from URL
     let pageMode: string|null = getDetailsMode()    
 
-    console.log('Page Mode: ', pageMode);
+    // console.log('Page Mode: ', pageMode);
 
     const [detailsMode, setDetailsMode] = React.useState(pageMode);
     const [changedDetailsData, setChangedDetailsData] = React.useState({} as any);
@@ -106,14 +106,14 @@ export default function Page({
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    console.log('Data from useEffect: ', data);
+                    console.log('Data from useEffect 2: ', data);
                     setChangedDetailsData(data);
                 })
         }
     }, [urlSearchParams])
 
     const formSchema = {
-        type: "object",
+        "type": "object",
         "properties": {
             "Id": {
                 "type": ["integer", "string"]

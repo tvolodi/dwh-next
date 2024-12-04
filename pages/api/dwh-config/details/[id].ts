@@ -2,6 +2,11 @@ import type { NextApiRequest, NextApiResponse } from "next";
 
 import { PrismaClient } from '@prisma/client';
 
+import { db } from '@/lib/db/drizzle';
+import { eq } from "drizzle-orm";
+import { DwhConfig } from '@/lib/db/schema';
+
+
 const prismaClient = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -17,11 +22,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const method = req.method;
     switch (method) {
         case "GET":
-            const data = await prismaClient.dwhConfig.findUnique({
-                where: {
-                    Id: Id
-                }
-            });
+            // const data = await prismaClient.dwhConfig.findUnique({
+            //     where: {
+            //         Id: Id
+            //     }
+            // });
+            let data = await db.select()
+                .from(DwhConfig)
+                .where(eq( DwhConfig.Id, Id));
+            
+            if (data.length > 0) {
+                let result = data[0]; 
+                return res.status(200).json(result);
+            }
+                
+            console.log("API: data", data);
             res.status(200).json(data);
             break;
         case "POST":
