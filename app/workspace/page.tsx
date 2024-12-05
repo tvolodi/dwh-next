@@ -1,7 +1,9 @@
+import { MasterDetails } from "@/components/master-details";
+
 function Page() {
     return (
         <div>
-            <h1>Page</h1>
+            <MasterDetails />
         </div>
     );
 }

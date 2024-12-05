@@ -1,8 +1,9 @@
+import { MasterDetails } from "@/components/master-details";
 
 function Page() {
     return (
         <div>
-            <h1>DWH Settings</h1>
+            <MasterDetails />
         </div>
     );
 }

@@ -8,6 +8,7 @@ import "./globals.css";
 
 import "primereact/resources/themes/lara-light-blue/theme.css";
 import 'primeicons/primeicons.css';
+import React from "react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,15 +33,15 @@ export default function RootLayout({
 }>) {
 
   return (
-
-
     <html lang="en" suppressHydrationWarning={true}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >       
-          <h1 >Root Layout</h1>
+          <h1 >Root Layout</h1>          
             {children}
       </body>
     </html>
   );
 }
+
+

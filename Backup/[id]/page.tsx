@@ -12,7 +12,7 @@ import { useParams, useSearchParams } from 'next/navigation';
 import React, { use, useEffect, useRef } from 'react';
 import { Button } from 'primereact/button';
 import { Toolbar } from 'primereact/toolbar';
-import { DwhConfigPageContext } from '../layout';
+import { DwhConfigPageContext } from '../layout__';
 import { Badge } from 'primereact/badge';
 
 import { PageMode } from '@/lib/common/enums';
@@ -38,32 +38,39 @@ export default function Page({
     const router = useRouter();
     const urlSearchParams = useSearchParams();
     const urlParams = useParams();
-    
+
     let id = 0;
 
     if(urlParams !== null) {
         id = parseInt(urlParams.id as string);
     }
-    
+
+    // const { data, error, mutate, isValidating, isLoading } = useSWR(`/api/dwh-config/details/`, fetcher);
+    // if(isLoading) return <div>Loading...</div>
+    // if(error) return <div>Error loading data</div>
+    // console.log('Data from SWR: ', data);
+
+
     // console.log('URL Params: ', urlParams);
-    
+
     // Use the parent page context to determine the details mode if it is master-detail page
     const parentPageContext : any = React.useContext(DwhConfigPageContext);
 
     // console.log('URL Params: ', urlSearchParams);
     // console.log('Parent Page Context: ', parentPageContext);
 
+
     function getDetailsMode() {
         if(urlSearchParams) {
-            if(urlSearchParams.has('mode')) {                
+            if(urlSearchParams.has('mode')) {
                 return urlSearchParams.get('mode');
             }
-        } 
+        }
         return PageMode.VIEW;
     }
 
     // Get page mode from URL
-    let pageMode: string|null = getDetailsMode()    
+    let pageMode: string|null = getDetailsMode()
 
     // console.log('Page Mode: ', pageMode);
 
@@ -86,29 +93,36 @@ export default function Page({
             setFormIsReadOnly(false);
         }
 
-        if(id === 0) {
-            console.log('Adding new record');
-            setChangedDetailsData({
-                "Id": "",
-                "Code": "",
-                "Name": "",
-                "ParamValue": "",
-                "ExtendedValue": "",
-                "Notes": ""
-            })
-        } else {
+        if(parentPageContext && parentPageContext.selectedData) {
+            console.log('Parent Page Context: ', parentPageContext);
+            console.log('Set page data from Parent Page Context: ');
+            setChangedDetailsData(parentPageContext.selectedData);
 
-            fetch(`/api/dwh-config/details/${id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    console.log('Data from useEffect 2: ', data);
-                    setChangedDetailsData(data);
+        } else {
+            if (id === 0) {
+                console.log('Adding new record');
+                setChangedDetailsData({
+                    "Id": "",
+                    "Code": "",
+                    "Name": "",
+                    "ParamValue": "",
+                    "ExtendedValue": "",
+                    "Notes": ""
                 })
+            } else {
+
+                fetch(`/api/dwh-config/details/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log('Data from useEffect 2: ', data);
+                        setChangedDetailsData(data);
+                    })
+            }
         }
     }, [urlSearchParams])
 
@@ -139,7 +153,7 @@ export default function Page({
                             "type": "string"
                         }
                     }
-                }                
+                }
             },
             "Notes": {
                 "type": "string"
@@ -172,7 +186,7 @@ export default function Page({
             },
             {
                 "type": "Control",
-                "scope": "#/properties/ExtendedValue",             
+                "scope": "#/properties/ExtendedValue",
             },
             {
                 "type": "Control",
@@ -185,7 +199,7 @@ export default function Page({
         console.log('Saving Data: ', changedDetailsData);
         let method = 'POST';
         if(pageMode === PageMode.EDIT) {
-            method = 'PUT';            
+            method = 'PUT';
         } else if(pageMode === PageMode.DELETE) {
             method = 'DELETE';
         }
@@ -202,12 +216,12 @@ export default function Page({
 
         console.log('Response from save: ', res);
         const data = await res.json();
-    
+
         console.log('Data from save: ', data);
-        
+
         // Trigger re-fetch
         parentPageContext.setIsNeededUpdate(true);
-    
+
         // Redirect to updated details page
         router.push(`/workspace/dwh-config/${data.Id}?mode=${PageMode.VIEW}`);
     }
@@ -216,12 +230,12 @@ export default function Page({
     const uischema = formUISchema; // person.uischema;
 
     const toolbarLeft = (
-        <React.Fragment>            
-            {(pageMode == PageMode.ADD || 
+        <React.Fragment>
+            {(pageMode == PageMode.ADD ||
                 pageMode == PageMode.EDIT)
              ? (
                 <>
-                    
+
                     <Badge
                         value="Editing"
                         severity="info"
@@ -235,9 +249,9 @@ export default function Page({
                     router.push(`/workspace/dwh-config/${id}?mode=${PageMode.EDIT}`);
                 }
             }/>
-            <Button icon="pi pi-trash" className="p-button-danger p-mr-2" onClick={                
+            <Button icon="pi pi-trash" className="p-button-danger p-mr-2" onClick={
                 () => {
-                    confirmDelete();                    
+                    confirmDelete();
                 }
             }/>
         </React.Fragment>
@@ -262,7 +276,7 @@ export default function Page({
                     toast.current?.show({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted' });
                 }
                 router.push(`/workspace/dwh-config/`);
-                
+
 
             },
             reject: () => {
@@ -297,8 +311,7 @@ export default function Page({
                     setChangedDetailsData(data);
                 }}
                 readonly={formIsReadOnly}
-
-            />                
+            />
         </div>
     );
 }

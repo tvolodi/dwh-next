@@ -20,7 +20,6 @@ const prisma = new PrismaClient();
 
 function Layout({ children }: Readonly<{ children: React.ReactNode }>, params: any) {
 
-
     const urlSearchParams = useSearchParams();
 
     if(params == undefined) {
@@ -40,24 +39,27 @@ function Layout({ children }: Readonly<{ children: React.ReactNode }>, params: a
     const [selectedData, setSelectedData] = React.useState<any>(null);
     const [ isNeededUpdate, setIsNeededUpdate ] = React.useState<boolean>(true);
     const [ objectId, setObjectId ] = React.useState<string>(id);
+    const [ data, setData ] = React.useState<any>([]);
     
-    const { data, error, isLoading, mutate } = useSWR("/workspace/dwh-config/api/", fetcher);
+    // const { data, error, isLoading, mutate } = useSWR("/workspace/dwh-config/api/", fetcher);
 
     useEffect(() => {
 
         if (isNeededUpdate) {
-          mutate(); // Trigger a refetch
+          // mutate(); // Trigger a refetch
           setIsNeededUpdate(false); // Reset the update flag
-        }
-      }, [isNeededUpdate, 
-        mutate
-    ]);
-
+          fetch(`/workspace/dwh-config/api/`).then((res) => res.json()).then((data) => {
+            console.log("Data: ", data);
+            // set the data to the state
+            setData(data);
+          });
+        }}
+      , [isNeededUpdate]);
     
     // Load the data from the API using SWR hook (with caching and so on)
     
-    if(isLoading) return <div>Loading...</div>
-    if(error) return <div>Error loading data</div>
+    // if(isLoading) return <div>Loading...</div>
+    // if(error) return <div>Error loading data</div>
 
     const toolbarLeft = (
         <React.Fragment>

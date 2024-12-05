@@ -15,7 +15,7 @@ export async function GET(req: any) {
     console.log("from drizzle");
     const data = await db.select().from(DwhConfig);
 
-    console.log("API: data", data);
+    // console.log("API: data", data);
     return Response.json(data);    
 }
 
@@ -27,14 +27,19 @@ export async function POST(req: any) {
     console.log("reqJson", reqJson);
     // console.log("req.body", req.body);
     delete reqJson.Id;
-    const data = await prismaClient.dwhConfig.create({
-        data: reqJson
-    });
-
+    // const data = await prismaClient.dwhConfig.create({
+    //     data: reqJson
+    // });
+    const reqResult = await db.insert(DwhConfig).values(reqJson).returning();
+    if(reqResult.length > 0) {        
+        console.log("API: POST result", reqResult[0]);
+        return Response.json(reqResult[0]);
+    }
 
     // console.log("API: data", data);
+    console.log("API: POST data", {});
 
-    return Response.json(data);    
+    return Response.json({});
 }
 
 export async function PUT(req: any) {    
