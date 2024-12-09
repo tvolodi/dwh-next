@@ -12,6 +12,14 @@ export const DwhConfig = metaSchema.table("DwhConfigs", {
     }
 );
 
+export const DataType = metaSchema.table("DataTypes", {
+    Id: serial().primaryKey(),
+    Code: text().unique(),
+    PgType: text().notNull(),
+    Name: text().notNull(),
+    Notes: text(),
+});
+
 export const JsonSchema = metaSchema.table("JsonSchemas", {
     Id: serial().primaryKey(),
     Code: text().unique(),

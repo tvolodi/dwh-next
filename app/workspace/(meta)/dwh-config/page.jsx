@@ -3,7 +3,7 @@ import { MasterDetails } from "@/components/master-details";
 function Page() {
     return (
         <div>
-            <MasterDetails />
+            <MasterDetails fullEntityName="meta.DwhConfig" />
         </div>
     );
 }

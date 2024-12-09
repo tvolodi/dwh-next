@@ -4,7 +4,7 @@ import { PrismaClient } from '@prisma/client';
 
 import { db } from '@/lib/db/drizzle';
 import { eq } from "drizzle-orm";
-import { DwhConfig } from '@/lib/db/schema';
+import { DwhConfig } from '@/lib/schemas/db/schema';
 
 
 const prismaClient = new PrismaClient();

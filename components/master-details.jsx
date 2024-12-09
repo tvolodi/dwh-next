@@ -8,27 +8,64 @@ import { Splitter, SplitterPanel } from "primereact/splitter";
 import { Toolbar } from "primereact/toolbar";
 import React from "react";
 import { Details } from "./details";
+import { PageMode } from "@/lib/common/enums";
 
 
-export function MasterDetails() {
+/// MasterDetails component
+/// @param {string} fullEntityName - full entity name including schema name: meta.DwhConfig
+
+export function MasterDetails({fullEntityName}) {
+
+    const dbSchemaName = fullEntityName.split(".")[0];
+    const entityName = fullEntityName.split(".")[1];
+
+    const [dataGridSchema, setDataGridSchema] = React.useState({})
 
     const [selectedData, setSelectedData] = React.useState({});
     const [data, setData] = React.useState([]);
+    const [ isListUpdateRequired, setIsListUpdateRequired ] = React.useState(true);
+    const [ detailsFormMode, setDetailsFormMode ] = React.useState(PageMode.VIEW);
 
+    
 
     React.useEffect(() => {
-        fetch("/workspace/dwh-config/api/")
-            .then((res) => res.json())
-            .then((data) => {
-                console.log("Data: ", data);
-                setData(data);
-                if(data.length > 0 && Object.keys(selectedData).length === 0) {
-                    setSelectedData(data[0]);
-                }
-            });
-    }, []);
+        if(isListUpdateRequired) {
+            fetch("/workspace/dwh-config/api/")
+                .then((res) => res.json())
+                .then((data) => {
+                    console.log("Data: ", data);
+                    setData(data);
+                    if(data.length > 0 && Object.keys(selectedData).length === 0) {
+                        setSelectedData(data[0]);
+                    }
+                });
+            setIsListUpdateRequired(false);
+        }
 
-    const dataGridSchema = {
+        if(Object.keys(dataGridSchema).length === 0) {
+
+            import(`../lib/schemas/${dbSchemaName}/${entityName}.list.js`)
+            .then((module) => {
+                console.log("Module: ", module);
+                setDataGridSchema(module.schema);
+            })
+
+            // fetch(`http://localhost:3000/api/readSchemaFile?dbschema=${dbSchemaName}&entity=${entityName}&type=list`, {
+            //     method: "GET",
+            //     headers: {
+            //         "Content-Type": "application/json",
+            //     },
+            // })
+            // .then((res) => res.json())
+            // .then((data) => {
+            //     console.log("Data: ", data);
+            //     setDataGridSchema(data.schema);
+            // });
+        }
+            
+    }, [isListUpdateRequired, dataGridSchema]);
+
+    const dataGridSchema1 = {
         Id: {
             type: "number",            
             label: "ID",
@@ -55,7 +92,10 @@ export function MasterDetails() {
         <React.Fragment>
             <Button icon="pi pi-plus" className="p-button-success p-mr-2" onClick={
                 () => {
-                    console.log("Add clicked");                    
+                    console.log("Add clicked");
+                    setSelectedData({Id: null, Code: "", Name: "", ParamValue: "", Notes: ""});
+                    setDetailsFormMode(PageMode.ADD);
+
                 }
             } />
             <Button icon="pi pi-pencil" className="p-button-help p-mr-2" />
@@ -96,8 +136,6 @@ export function MasterDetails() {
                       >
                         { Object.keys(dataGridSchema).map((key, i) => {
                             const colParamValues = dataGridSchema[key];
-                            console.log("key: ", key);
-                            console.log("colParamValues: ", colParamValues);
                             return (
                                 <Column 
                                     field={key} 
@@ -112,7 +150,14 @@ export function MasterDetails() {
               <SplitterPanel className="flex" size={10} minSize={6} style={{ overflow: 'auto' }}>
 
                     <Card>
-                        <Details data={selectedData}/>
+                        <Details 
+                            data={selectedData} 
+                            setData={setSelectedData}
+                            setIsListUpdateRequired={setIsListUpdateRequired}
+                            fullEntityName={fullEntityName} 
+                            pageModeParam={detailsFormMode} 
+                            setDetailsFormMode={setDetailsFormMode}
+                            />
                   </Card>
 
               </SplitterPanel>
