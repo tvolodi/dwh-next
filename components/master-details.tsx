@@ -14,12 +14,16 @@ import { PageMode } from "@/lib/common/enums";
 /// MasterDetails component
 /// @param {string} fullEntityName - full entity name including schema name: meta.DwhConfig
 
-export function MasterDetails({fullEntityName}) {
+export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string}>) {
 
-    const dbSchemaName = fullEntityName.split(".")[0];
-    const entityName = fullEntityName.split(".")[1];
+    const aaa = "meta.DwhConfig";
 
-    const [dataGridSchema, setDataGridSchema] = React.useState({})
+    const _fullEntityName = fullEntityName;
+
+    const dbSchemaName = fullEntityName?.split(".")[0];
+    const entityName = fullEntityName?.split(".")[1];
+
+    const [dataGridSchema, setDataGridSchema] = React.useState<{ [key: string]: { type: string, label: string } }>({})
 
     const [selectedData, setSelectedData] = React.useState({});
     const [data, setData] = React.useState([]);

@@ -1,5 +1,7 @@
 'use client';
 
+import type { UISchemaElement } from "@jsonforms/core";
+
 import React, { use, useEffect, useRef } from "react";
 import { JsonForms, JsonFormsInitStateProps } from '@jsonforms/react';
 import { materialRenderers, materialCells } from '@jsonforms/material-renderers';
@@ -15,7 +17,21 @@ import Page from "@/app/dashboard/page";
 // @param {object} data - data to be displayed
 // @param {string} fullEntityName - full entity name including schema name: meta.DwhConfig
 
-export function Details({ data, setData, fullEntityName, pageModeParam, setIsListUpdateRequired, setDetailsFormMode}) {
+export function Details({
+     data, 
+     setData, 
+     fullEntityName, 
+     pageModeParam, 
+     setIsListUpdateRequired, 
+     setDetailsFormMode
+    } : Readonly<{
+        data: any, 
+        setData: any, 
+        fullEntityName: 
+        string, pageModeParam: string, 
+        setIsListUpdateRequired: any, 
+        setDetailsFormMode: any
+    }>) {
     
     var suppressHydrationWarning = true
 
@@ -40,7 +56,7 @@ export function Details({ data, setData, fullEntityName, pageModeParam, setIsLis
     // });
 
     // Load schema for UI description for the form
-    const [ formUiSchema, setFormUiSchema ] = React.useState({})
+    const [ formUiSchema, setFormUiSchema ] = React.useState<UISchemaElement>({ type: '' })
     // () => {
     //     const dbSchemaName = fullEntityName.split(".")[0];
     //     const entityName = fullEntityName.split(".")[1];
@@ -62,7 +78,7 @@ export function Details({ data, setData, fullEntityName, pageModeParam, setIsLis
     });
     
 
-    const setFormMode = (pageMode) => {
+    const setFormMode = (pageMode: string) => {
         setPageMode(pageMode);
         if(pageMode === PageMode.VIEW || pageMode === PageMode.DELETE) {
             setIsFormReadOnly(true);
@@ -80,8 +96,8 @@ export function Details({ data, setData, fullEntityName, pageModeParam, setIsLis
         // Load schema for data description for the form
         console.log('formDataSchema: ', formDataSchema);
         if(formDataSchema == null || Object.keys(formDataSchema).length === 0) {
-            const dbSchemaName = fullEntityName.split(".")[0];
-            const entityName = fullEntityName.split(".")[1];
+            const dbSchemaName = fullEntityName?.split(".")[0];
+            const entityName = fullEntityName?.split(".")[1];
             import(`../lib/schemas/${dbSchemaName}/${entityName}.details.js`)
             .then((module) => {
                 console.log("details Module: ", module);
@@ -91,8 +107,8 @@ export function Details({ data, setData, fullEntityName, pageModeParam, setIsLis
 
         // Load schema for UI description for the form
         //if(formUiSchema == null || Object.keys(formUiSchema).length === 0) {
-            const dbSchemaName = fullEntityName.split(".")[0];
-            const entityName = fullEntityName.split(".")[1];
+            const dbSchemaName = fullEntityName?.split(".")[0];
+            const entityName = fullEntityName?.split(".")[1];
             import(`../lib/schemas/${dbSchemaName}/${entityName}.detailsUi.js`)
             .then((module) => {
                 console.log("detailsUi Module: ", module);
@@ -133,7 +149,7 @@ export function Details({ data, setData, fullEntityName, pageModeParam, setIsLis
         </React.Fragment>
     )
 
-    async function handleSave(operationModePar) {
+    async function handleSave(operationModePar: string) {
 
         console.log("operationModePar from handleSave: ", operationModePar);
 
@@ -143,7 +159,7 @@ export function Details({ data, setData, fullEntityName, pageModeParam, setIsLis
         }
         
         console.log('Saving Data: ', formData);
-        let dataToUpdate = {};
+        let dataToUpdate: { [key: string]: any } = {};
         let method = '';
 
         console.log('operationMode from handleSave: ', operationMode);
@@ -203,7 +219,7 @@ export function Details({ data, setData, fullEntityName, pageModeParam, setIsLis
         // router.push(`/workspace/dwh-config/${data.Id}?mode=${PageMode.VIEW}`);
     }
 
-    const toast = useRef(null);
+    const toast = useRef<Toast>(null);
 
     const confirmDelete = () => {
         
@@ -249,7 +265,7 @@ export function Details({ data, setData, fullEntityName, pageModeParam, setIsLis
             <Toolbar start={toolbarLeft} />
             <Toast ref={toast} />
             <ConfirmDialog />
-            <JsonForms suppressHydrationWarning={true}
+            <JsonForms
                 schema={formDataSchema}
                 uischema={formUiSchema}
                 data={formData}

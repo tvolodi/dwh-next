@@ -1,5 +1,5 @@
 'use client'
-import { createContext, useState } from "react";
+import { createContext, use, useEffect, useState } from "react";
 import { PrimeReactProvider } from 'primereact/api';
 import AppMenuBar from "@/components/app-menu-bar";
 import App from "next/app";
@@ -11,13 +11,8 @@ import { Column } from "primereact/column";
 import { comma } from "postcss/lib/list";
 import { url } from "inspector";
 import { Menu } from "primereact/menu";
-import { useRouter } from "next/navigation";
+import { useRouter,  } from "next/navigation";
 import React from "react";
-
-
-
-
-
 
 type TUiContext = {
     workspaceState: {isAppSidebarVisible: boolean},
@@ -26,14 +21,15 @@ type TUiContext = {
 
 export const UiContext = createContext<TUiContext | undefined>(undefined);
 
-
-
 const menuPanelKey = "menuPanelKey";
 
 function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
     const [workspaceState, setWorkspaceState] = useState({isAppSidebarVisible: true});
 
     const router = useRouter();
+
+    // Sidebar menu items. Inserting from code generator
+    // #insert-file: ../lib/schemas/gui/sidebar_menu.ts
 
     const items = [
         {
@@ -68,7 +64,6 @@ function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
                     label: "Last Extracted Records",
                     icon: "pi pi-fw pi-list",
                 }
-
             ]
         },
         {
@@ -84,6 +79,16 @@ function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
         }
     ]
 
+    const [ sidebarItems, setSidebarItems ] = useState<{ label: string; icon: string; items?: { label: string; icon: string; command?: () => void; }[]; command?: () => void; }[]>([]);
+
+    useEffect(() => {
+        import("@/lib/schemas/gui/sidebar_menu")
+            .then((module) => {
+                console.log("Module: ", module);
+                setSidebarItems(module.schema);
+            })  
+    }, []);
+
     return (
         <UiContext.Provider value={{
             workspaceState,
@@ -94,7 +99,7 @@ function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
                 <AppMenuBar />
                 <Splitter style={{height: "800px", width: "1500px"}}>
                     <SplitterPanel className="flex" size={20} minSize={3} style={{overflow: 'auto'}}>
-                        <PanelMenu model={items} ></PanelMenu>                        
+                        <PanelMenu model={sidebarItems} ></PanelMenu>                        
                     </SplitterPanel>
                     <SplitterPanel className="flex" size={80} minSize={15}>
                         {children}
@@ -107,50 +112,3 @@ function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
 }
 
 export default Layout;
-
-// type ErrorBoundaryProps = {
-//     children: React.ReactNode;
-// };
-
-// type ErrorBoundaryState = {
-//     hasError: boolean;
-// };
-
-// class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
-//     constructor(props: any) {
-//         super(props)
-
-//         // Define a state variable to track whether is an error or not
-//         this.state = { hasError: false }
-//     }
-//     static getDerivedStateFromError (error: any) {
-//         // Update state so the next render will show the fallback UI
-
-//         return { hasError: true }
-//     }
-//     componentDidCatch (error: any, errorInfo: any) {
-//         // You can use your own error logging service here
-//         console.log({ error, errorInfo })
-//     }
-//     render () {
-//         // Check if the error is thrown
-//         if (this.state.hasError) {
-//             // You can render any custom fallback UI
-//             return (
-//                 <div>
-//                     <h2>Oops, there is an error!</h2>
-//                     <button
-//                         type="button"
-//                         onClick={() => this.setState({ hasError: false })}
-//                     >
-//                         Try again?
-//                     </button>
-//                 </div>
-//             )
-//         }
-
-//         // Return children components in case of no error
-
-//         return this.props.children
-//     }
-// }

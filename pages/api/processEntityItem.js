@@ -4,7 +4,7 @@ import  fs from "fs";
 import { db } from '@/lib/db/drizzle';
 import { eq } from "drizzle-orm";
 
-import * as dbSchema from '@/lib/schemas/db/schema';
+import * as dbSchema from '@/lib/schemas/pg_db/schema';
 
 export default async function handler(req, res) {
     console.log("API: hello from processEntityItem");

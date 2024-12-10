@@ -1,10 +1,7 @@
-import { PrismaClient } from '@prisma/client';
-
 import { db } from '@/lib/db/drizzle';
-import { DwhConfig } from '@/lib/schemas/db/schema';
+import { DwhConfig } from '@/lib/schemas/pg_db/schema';
 import { eq } from "drizzle-orm";
 
-const prismaClient = new PrismaClient();
 export async function GET(req: any) {
         
     // console.log("API: getData for DWH Config");

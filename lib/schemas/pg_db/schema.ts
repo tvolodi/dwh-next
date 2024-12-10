@@ -1,4 +1,4 @@
-import {integer, text, boolean, jsonb, serial, primaryKey, pgTable, pgSchema} from "drizzle-orm/pg-core";
+import {integer, text, boolean, jsonb, serial, primaryKey, pgTable, pgSchema, AnyPgColumn} from "drizzle-orm/pg-core";
 
 export const metaSchema = pgSchema("dwh-meta");
 
@@ -20,11 +20,26 @@ export const DataType = metaSchema.table("DataTypes", {
     Notes: text(),
 });
 
+export const Entity = metaSchema.table("Entities", {
+    Id: serial().primaryKey(),
+    Code: text().unique(),
+    Name: text().notNull(),
+    Notes: text(),
+    ModuleId: integer().references(() => Module.Id),
+});
+
 export const JsonSchema = metaSchema.table("JsonSchemas", {
     Id: serial().primaryKey(),
     Code: text().unique(),
     Name: text().notNull(),
     SchemaName: text().notNull(),
     Schema: jsonb(),
+    Notes: text(),
+});
+
+export const Module = metaSchema.table("Modules", {
+    Id: serial().primaryKey(),
+    Code: text().unique(),
+    Name: text().notNull(),
     Notes: text(),
 });

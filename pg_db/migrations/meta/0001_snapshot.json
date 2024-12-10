@@ -1,6 +1,6 @@
 {
-  "id": "0ce6c77f-597a-4af0-b7c3-c894f20a99ce",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "c47829c8-b11c-4ac4-9f05-b09e1ea19998",
+  "prevId": "1a34b7f9-ae3c-441f-a517-491f8dea20f9",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -112,6 +112,72 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "dwh-meta.Entities": {
+      "name": "Entities",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ModuleId": {
+          "name": "ModuleId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Entities_ModuleId_Modules_Id_fk": {
+          "name": "Entities_ModuleId_Modules_Id_fk",
+          "tableFrom": "Entities",
+          "tableTo": "Modules",
+          "schemaTo": "dwh-meta",
+          "columnsFrom": [
+            "ModuleId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Entities_Code_unique": {
+          "name": "Entities_Code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "dwh-meta.JsonSchemas": {
       "name": "JsonSchemas",
       "schema": "dwh-meta",
@@ -159,6 +225,51 @@
       "uniqueConstraints": {
         "JsonSchemas_Code_unique": {
           "name": "JsonSchemas_Code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "dwh-meta.Modules": {
+      "name": "Modules",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Modules_Code_unique": {
+          "name": "Modules_Code_unique",
           "nullsNotDistinct": false,
           "columns": [
             "Code"

@@ -1,1 +1,0 @@
-ALTER TABLE "dwh-meta"."DwhConfigs" ADD COLUMN "Col1" text;

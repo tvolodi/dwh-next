@@ -1,9 +1,60 @@
 {
-  "id": "879a1ce9-57b7-426a-a4cf-026f3d11bd0f",
-  "prevId": "fbaa9390-4d46-41b8-986d-0b536528f7fd",
+  "id": "1a34b7f9-ae3c-441f-a517-491f8dea20f9",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "dwh-meta.DataTypes": {
+      "name": "DataTypes",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "PgType": {
+          "name": "PgType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "DataTypes_Code_unique": {
+          "name": "DataTypes_Code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "dwh-meta.DwhConfigs": {
       "name": "DwhConfigs",
       "schema": "dwh-meta",
