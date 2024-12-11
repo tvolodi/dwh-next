@@ -4,6 +4,7 @@ import { Button } from "primereact/button";
 import { Card } from "primereact/card";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
+
 import { Splitter, SplitterPanel } from "primereact/splitter";
 import { Toolbar } from "primereact/toolbar";
 import React from "react";
@@ -16,9 +17,11 @@ import { PageMode } from "@/lib/common/enums";
 
 export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string}>) {
 
-    const aaa = "meta.DwhConfig";
+    console.log("MasterDetails: ", fullEntityName);
 
-    const _fullEntityName = fullEntityName;
+    if(fullEntityName === undefined || fullEntityName === null || fullEntityName === "") {
+        return;
+    }
 
     const dbSchemaName = fullEntityName?.split(".")[0];
     const entityName = fullEntityName?.split(".")[1];
@@ -34,7 +37,8 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
 
     React.useEffect(() => {
         if(isListUpdateRequired) {
-            fetch("/workspace/dwh-config/api/")
+            // fetch("/workspace/dwh-config/api/")
+            fetch(`/api/getEntityItems?fullEntityName=${fullEntityName}`)
                 .then((res) => res.json())
                 .then((data) => {
                     console.log("Data: ", data);
@@ -46,13 +50,18 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
             setIsListUpdateRequired(false);
         }
 
-        if(Object.keys(dataGridSchema).length === 0) {
+//        if(Object.keys(dataGridSchema).length === 0) {
 
             import(`../lib/schemas/${dbSchemaName}/${entityName}.list.js`)
             .then((module) => {
                 console.log("Module: ", module);
                 setDataGridSchema(module.schema);
-            })
+            }).catch((err) => {
+                console.log("Error read schema for data grid: ", err);
+                setDataGridSchema({});
+                // Try to use PG db schema instead
+                // TODO. Need to implement this
+            });
 
             // fetch(`http://localhost:3000/api/readSchemaFile?dbschema=${dbSchemaName}&entity=${entityName}&type=list`, {
             //     method: "GET",
@@ -65,9 +74,9 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
             //     console.log("Data: ", data);
             //     setDataGridSchema(data.schema);
             // });
-        }
+  //      }
             
-    }, [isListUpdateRequired, dataGridSchema]);
+    }, [isListUpdateRequired, fullEntityName]);
 
     const dataGridSchema1 = {
         Id: {
@@ -94,6 +103,7 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
 
     const toolbarLeft = (
         <React.Fragment>
+            <h1><u>{fullEntityName}</u></h1>
             <Button icon="pi pi-plus" className="p-button-success p-mr-2" onClick={
                 () => {
                     console.log("Add clicked");

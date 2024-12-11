@@ -37,7 +37,7 @@ export function Details({
 
     const savedData = data;
 
-    console.log('Details. From list data: ', data);
+    console.log('Details. Data come  from list: ', data);
     console.log('fullEntityName: ', fullEntityName);
     console.log('pageModeParam: ', pageModeParam);
 
@@ -45,27 +45,9 @@ export function Details({
     
     // Load schema for data description for the form
     const [ formDataSchema, setFormDataSchema ] = React.useState({})
-    // () => {
-    //     const dbSchemaName = fullEntityName.split(".")[0];
-    //     const entityName = fullEntityName.split(".")[1];
-    //     import(`../lib/schemas/${dbSchemaName}/${entityName}.details.js`)
-    //     .then((module) => {
-    //         console.log("details Module:  from set state ", module);
-    //         return module.schema;
-    //     })
-    // });
 
     // Load schema for UI description for the form
     const [ formUiSchema, setFormUiSchema ] = React.useState<UISchemaElement>({ type: '' })
-    // () => {
-    //     const dbSchemaName = fullEntityName.split(".")[0];
-    //     const entityName = fullEntityName.split(".")[1];
-    //     import(`../lib/schemas/${dbSchemaName}/${entityName}.detailsUi.js`)
-    //     .then((module) => {
-    //         console.log("detailsUi Module from set state: ", module);
-    //         setFormUiSchema(module.schema);
-    //     });
-    // });
 
     const [ pageMode, setPageMode ] = React.useState(pageModeParam);
     const [ isFormReadOnly, setIsFormReadOnly ] = React.useState(() => {
@@ -75,8 +57,7 @@ export function Details({
         } else {
             return false;
         }
-    });
-    
+    });    
 
     const setFormMode = (pageMode: string) => {
         setPageMode(pageMode);
@@ -94,29 +75,35 @@ export function Details({
         setFormData(data);
 
         // Load schema for data description for the form
-        console.log('formDataSchema: ', formDataSchema);
-        if(formDataSchema == null || Object.keys(formDataSchema).length === 0) {
+        console.log('Details. useEffect. formDataSchema: ', formDataSchema);
+        // if(formDataSchema == null || Object.keys(formDataSchema).length === 0) {
             const dbSchemaName = fullEntityName?.split(".")[0];
             const entityName = fullEntityName?.split(".")[1];
             import(`../lib/schemas/${dbSchemaName}/${entityName}.details.js`)
             .then((module) => {
                 console.log("details Module: ", module);
                 setFormDataSchema(module.schema);
-            })
-        }
+            }).catch((err) => {
+                console.log(`Error read schema for data (${entityName}): `, err);
+                setFormDataSchema({ type: '' });
+            });
+        // }
 
         // Load schema for UI description for the form
         //if(formUiSchema == null || Object.keys(formUiSchema).length === 0) {
-            const dbSchemaName = fullEntityName?.split(".")[0];
-            const entityName = fullEntityName?.split(".")[1];
+            // const dbSchemaName = fullEntityName?.split(".")[0];
+            // const entityName = fullEntityName?.split(".")[1];
             import(`../lib/schemas/${dbSchemaName}/${entityName}.detailsUi.js`)
             .then((module) => {
                 console.log("detailsUi Module: ", module);
                 setFormUiSchema(module.schema);
-            })
+            }).catch((err) => {
+                console.log(`Error read schema for UI (${entityName}): `, err);
+                setFormUiSchema({ type: '' });
+            });
         //}
 
-    }, [pageModeParam, data, formDataSchema, formUiSchema]);
+    }, [pageModeParam, data, fullEntityName]);
 
     const toolbarLeft = (
         <React.Fragment>
