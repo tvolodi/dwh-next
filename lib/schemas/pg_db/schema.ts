@@ -1,4 +1,5 @@
 import {integer, text, boolean, jsonb, serial, primaryKey, pgTable, pgSchema, AnyPgColumn} from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
 export const metaSchema = pgSchema("dwh-meta");
 
@@ -27,6 +28,11 @@ export const Entity = metaSchema.table("Entities", {
     Notes: text(),
     ModuleId: integer().references(() => Module.Id),
 });
+export const EntityRelations = relations(Entity, ({ one }) => ({
+    module: one(Module, { fields: [Entity.ModuleId], references: [Module.Id] }),
+}))
+
+
 
 export const JsonSchema = metaSchema.table("JsonSchemas", {
     Id: serial().primaryKey(),
@@ -43,3 +49,7 @@ export const Module = metaSchema.table("Modules", {
     Name: text().notNull(),
     Notes: text(),
 });
+
+export const ModuleRelations = relations(Module, ({ many }) => ({
+    Entity: many(Entity),
+}))

@@ -13,8 +13,9 @@ import { comma } from "postcss/lib/list";
 import { Menu } from "primereact/menu";
 import { useRouter,  } from "next/navigation";
 import React from "react";
+import {WorkspaceLayoutContext} from "@/lib/contexts/WorkspaceLayoutContext";
 
-export const WorkspaceLayoutContext = createContext(undefined);
+// export const WorkspaceLayoutContext = createContext<WorkspaceLayoutContextType | undefined | never>(undefined);
 
 function Layout({ children }) {
     const [workspaceState, setWorkspaceState] = useState({isAppSidebarVisible: true});

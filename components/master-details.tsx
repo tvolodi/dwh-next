@@ -26,7 +26,7 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
     const dbSchemaName = fullEntityName?.split(".")[0];
     const entityName = fullEntityName?.split(".")[1];
 
-    const [dataGridSchema, setDataGridSchema] = React.useState<{ [key: string]: { type: string, label: string } }>({})
+    const [dataGridSchema, setDataGridSchema] = React.useState<{ [key: string]: { type: string, label: string, ref: string } }>({})
 
     const [selectedData, setSelectedData] = React.useState({});
     const [data, setData] = React.useState([]);
@@ -36,70 +36,67 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
     
 
     React.useEffect(() => {
-        if(isListUpdateRequired) {
-            // fetch("/workspace/dwh-config/api/")
-            fetch(`/api/getEntityItems?fullEntityName=${fullEntityName}`)
-                .then((res) => res.json())
-                .then((data) => {
-                    console.log("Data: ", data);
-                    setData(data);
-                    if(data.length > 0 && Object.keys(selectedData).length === 0) {
-                        setSelectedData(data[0]);
-                    }
+        
+        const loadData = async () => {
+
+            // get dataSchema for the form if it is not loaded yet
+            // It can be set during user data table setup, so we must not rewrite it
+            let listSchema = dataGridSchema;
+            if(Object.keys(listSchema).length === 0) {
+
+                try {
+                    const listSchemaModule = await import(`../lib/schemas/${dbSchemaName}/${entityName}.list.js`)
+                    listSchema = listSchemaModule.schema;
+                    console.log("listSchema: ", listSchema);
+                    setDataGridSchema(listSchema);
+                } catch (error) {
+                    // Do nothing. Schema is already == {}
+                }
+            }
+
+            // Define which columns to get from DB
+            const columns = Object.keys(listSchema).map((key) => key).join(", ");
+
+            // Define which foreign data to get from DB
+            const include = [];
+            for(const key in listSchema) {
+
+                console.log("key: ", key);
+
+                const colParamValues = listSchema[key];
+
+                console.log("value: ", colParamValues);
+
+                if(colParamValues.hasOwnProperty('ref')){
+                    console.log("ref: ", colParamValues.ref);
+
+                    const ref = colParamValues.ref;
+                    include.push(ref);
+                    const refColumns = Object.keys(ref).map((key) => key).join(", ");                    
+                }
+            }
+            const reqBody = {
+                include: include,
+            }
+            const result = await fetch(`/api/getEntityItems?fullEntityName=${fullEntityName}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(reqBody),
                 });
+            const data = await result.json();
+            setData(data)
+            if (data.length > 0 && Object.keys(selectedData).length === 0) {
+                // Set position on the first row
+                setSelectedData(data[0]);
+            } else {
+                // Clear old data
+                setSelectedData({});
+            }
             setIsListUpdateRequired(false);
         }
-
-//        if(Object.keys(dataGridSchema).length === 0) {
-
-            import(`../lib/schemas/${dbSchemaName}/${entityName}.list.js`)
-            .then((module) => {
-                console.log("Module: ", module);
-                setDataGridSchema(module.schema);
-            }).catch((err) => {
-                console.log("Error read schema for data grid: ", err);
-                setDataGridSchema({});
-                // Try to use PG db schema instead
-                // TODO. Need to implement this
-            });
-
-            // fetch(`http://localhost:3000/api/readSchemaFile?dbschema=${dbSchemaName}&entity=${entityName}&type=list`, {
-            //     method: "GET",
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //     },
-            // })
-            // .then((res) => res.json())
-            // .then((data) => {
-            //     console.log("Data: ", data);
-            //     setDataGridSchema(data.schema);
-            // });
-  //      }
+        loadData();
             
     }, [isListUpdateRequired, fullEntityName]);
-
-    const dataGridSchema1 = {
-        Id: {
-            type: "number",            
-            label: "ID",
-        },
-        Code: {
-            type: "string",
-            label: "Code",
-        },
-        Name: {
-            type: "string",
-            label: "Name",
-        },
-        ParamValue: {
-            type: "string",
-            label: "Param Value",
-        },
-        Notes: {
-            type: "string",
-            label: "Notes",
-        }
-    }
 
     const toolbarLeft = (
         <React.Fragment>
@@ -107,7 +104,7 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
             <Button icon="pi pi-plus" className="p-button-success p-mr-2" onClick={
                 () => {
                     console.log("Add clicked");
-                    setSelectedData({Id: null, Code: "", Name: "", ParamValue: "", Notes: ""});
+                    setSelectedData({});
                     setDetailsFormMode(PageMode.ADD);
 
                 }
@@ -163,7 +160,7 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
               </SplitterPanel>
               <SplitterPanel className="flex" size={10} minSize={6} style={{ overflow: 'auto' }}>
 
-                    <Card>
+                    {/* <Card>
                         <Details 
                             data={selectedData} 
                             setData={setSelectedData}
@@ -172,7 +169,7 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
                             pageModeParam={detailsFormMode} 
                             setDetailsFormMode={setDetailsFormMode}
                             />
-                  </Card>
+                  </Card> */}
 
               </SplitterPanel>
           </Splitter>

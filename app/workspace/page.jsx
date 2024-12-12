@@ -2,7 +2,7 @@
 
 import { MasterDetails } from "@/components/master-details";
 
-import { WorkspaceLayoutContext } from "./layout";
+import { WorkspaceLayoutContext } from "@/lib/contexts/WorkspaceLayoutContext";
 import React, { useContext } from "react";
 
 

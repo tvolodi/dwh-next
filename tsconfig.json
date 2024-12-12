@@ -36,6 +36,6 @@
     "pages/api/processEntityItem.js", 
     "pages/api/processEntityItem.js", 
     "app/workspace/layout.jsx"
-  ],
+, "app/workspace/layout copy.__tsx"  ],
   "exclude": ["node_modules"]
 }

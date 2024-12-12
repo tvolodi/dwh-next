@@ -11,7 +11,6 @@ import { Badge } from "primereact/badge";
 import { Toast } from "primereact/toast";
 import { Toolbar } from "primereact/toolbar";
 import { PageMode } from "../lib/common/enums";
-import Page from "@/app/dashboard/page";
 
 // Details component
 // @param {object} data - data to be displayed
@@ -51,7 +50,6 @@ export function Details({
 
     const [ pageMode, setPageMode ] = React.useState(pageModeParam);
     const [ isFormReadOnly, setIsFormReadOnly ] = React.useState(() => {
-        console.log('PageMode: ', pageMode);
         if(pageMode === PageMode.VIEW || pageMode === PageMode.DELETE) {
             return true;
         } else {
@@ -69,40 +67,51 @@ export function Details({
     }
 
     useEffect(() => {
-        // setFormData(savedData);
-        setFormMode(pageModeParam);
+        const loadSchemas = async () => {
+            setFormMode(pageModeParam);
 
-        setFormData(data);
+            setFormData(data);        
 
-        // Load schema for data description for the form
-        console.log('Details. useEffect. formDataSchema: ', formDataSchema);
-        // if(formDataSchema == null || Object.keys(formDataSchema).length === 0) {
+            // Load schema for data description for the form
+            console.log('Details. useEffect. formDataSchema: ', formDataSchema);
+            // if(formDataSchema == null || Object.keys(formDataSchema).length === 0) {
+
             const dbSchemaName = fullEntityName?.split(".")[0];
             const entityName = fullEntityName?.split(".")[1];
-            import(`../lib/schemas/${dbSchemaName}/${entityName}.details.js`)
-            .then((module) => {
-                console.log("details Module: ", module);
-                setFormDataSchema(module.schema);
-            }).catch((err) => {
-                console.log(`Error read schema for data (${entityName}): `, err);
-                setFormDataSchema({ type: '' });
-            });
-        // }
+            const dataSchemaModule = await import(`../lib/schemas/${dbSchemaName}/${entityName}.details.js`);
+            console.log("dataSchemaModule: ", dataSchemaModule);
+            const uiSchemaModule = await import(`../lib/schemas/${dbSchemaName}/${entityName}.detailsUi.js`);
+            console.log("uiSchemaModule: ", uiSchemaModule);
+            
+            const dataSchema = dataSchemaModule.schema;
+            // Load option items for select fields
+            const dataProperties = dataSchema.properties;
+            for(const key in dataProperties) {
+                if(dataProperties[key].hasOwnProperty('ref') && dataProperties[key].ref !== '') {
+                    const refEntityFullName = dataProperties[key].ref;
+                    const refData = await fetch(`/api/getEntityItems?fullEntityName=${refEntityFullName}`);
+                    const refDataJson = await refData.json();
+                    const optionItems = [];
+                    for(let i = 0; i < refDataJson.length; i++) {
+                        const optionItem = {
+                            const: refDataJson[i].Id,
+                            title: refDataJson[i].Name
+                        }
+                        optionItems.push(optionItem);
+                    }
+                    dataProperties[key].oneOf = optionItems;
+                }
+            }
 
-        // Load schema for UI description for the form
-        //if(formUiSchema == null || Object.keys(formUiSchema).length === 0) {
-            // const dbSchemaName = fullEntityName?.split(".")[0];
-            // const entityName = fullEntityName?.split(".")[1];
-            import(`../lib/schemas/${dbSchemaName}/${entityName}.detailsUi.js`)
-            .then((module) => {
-                console.log("detailsUi Module: ", module);
-                setFormUiSchema(module.schema);
-            }).catch((err) => {
-                console.log(`Error read schema for UI (${entityName}): `, err);
-                setFormUiSchema({ type: '' });
-            });
-        //}
+            const uiSchema = uiSchemaModule.schema;
+            
+            setFormDataSchema(dataSchema);
+            setFormUiSchema(uiSchema);
 
+        };
+
+        loadSchemas();
+    
     }, [pageModeParam, data, fullEntityName]);
 
     const toolbarLeft = (
@@ -264,7 +273,9 @@ export function Details({
                 }}
                 readonly={isFormReadOnly}
             />
-            {formData ? <pre>{JSON.stringify(formData, null, 2)}</pre> : null}
+            {formData ? <pre>{`Data: ${JSON.stringify(formData, null, 2)}`}</pre> : null}
+            <pre>`=======================================`</pre>
+            {formDataSchema ? <pre>{`Data schema: ${JSON.stringify(formDataSchema, null, 2)}`}</pre> : null }
 
         </>
     );
