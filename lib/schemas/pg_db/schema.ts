@@ -3,7 +3,7 @@ import { relations } from "drizzle-orm";
 
 export const metaSchema = pgSchema("dwh-meta");
 
-export const DwhConfig = metaSchema.table("DwhConfigs", {
+export const meta_DwhConfig = metaSchema.table("DwhConfigs", {
         Id: serial().primaryKey(),
         Code: text().unique(),
         Name: text().notNull(),
@@ -13,7 +13,7 @@ export const DwhConfig = metaSchema.table("DwhConfigs", {
     }
 );
 
-export const DataType = metaSchema.table("DataTypes", {
+export const meta_DataType = metaSchema.table("DataTypes", {
     Id: serial().primaryKey(),
     Code: text().unique(),
     PgType: text().notNull(),
@@ -21,20 +21,20 @@ export const DataType = metaSchema.table("DataTypes", {
     Notes: text(),
 });
 
-export const Entity = metaSchema.table("Entities", {
+export const meta_Entity = metaSchema.table("Entities", {
     Id: serial().primaryKey(),
     Code: text().unique(),
     Name: text().notNull(),
     Notes: text(),
-    ModuleId: integer().references(() => Module.Id),
+    ModuleId: integer().references(() => meta_Module.Id),
 });
-export const EntityRelations = relations(Entity, ({ one }) => ({
-    module: one(Module, { fields: [Entity.ModuleId], references: [Module.Id] }),
+export const meta_EntityRelations = relations(meta_Entity, ({ one }) => ({
+    Module: one(meta_Module, { fields: [meta_Entity.ModuleId], references: [meta_Module.Id] }),
 }))
 
 
 
-export const JsonSchema = metaSchema.table("JsonSchemas", {
+export const meta_JsonSchema = metaSchema.table("JsonSchemas", {
     Id: serial().primaryKey(),
     Code: text().unique(),
     Name: text().notNull(),
@@ -43,13 +43,13 @@ export const JsonSchema = metaSchema.table("JsonSchemas", {
     Notes: text(),
 });
 
-export const Module = metaSchema.table("Modules", {
+export const meta_Module = metaSchema.table("Modules", {
     Id: serial().primaryKey(),
     Code: text().unique(),
     Name: text().notNull(),
     Notes: text(),
 });
 
-export const ModuleRelations = relations(Module, ({ many }) => ({
-    Entity: many(Entity),
+export const meta_ModuleRelations = relations(meta_Module, ({ many }) => ({
+    Entity: many(meta_Entity),
 }))

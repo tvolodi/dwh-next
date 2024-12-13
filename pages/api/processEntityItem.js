@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 import * as dbSchema from '@/lib/schemas/pg_db/schema';
 
 export default async function handler(req, res) {
-    console.log("API: hello from processEntityItem");
+    console.log("API: hello from processEntityItem 2");
     console.log("API: req.query: ", req.query);
 
     const fullEntityName = req.query.fullEntityName;
@@ -22,8 +22,10 @@ export default async function handler(req, res) {
     // console.log("API: entity: ", entity);
 
     const method = req.method;
+    const reqBody = req.body;
 
     console.log("API: method: ", method);
+    console.log("API: reqBody: ", reqBody);
 
     const moduleName = `../pages/api/${dbSchemaName}/${entityName}.${method}.ts`;
 
@@ -35,6 +37,8 @@ export default async function handler(req, res) {
     } catch (err) {
         console.log(`Error from import custom module ${moduleName} for ${method} method: `);
     }
+
+    console.log(`Entity name: ${entityName}`);
 
     const entity = dbSchema[entityName];
 
@@ -48,8 +52,12 @@ export default async function handler(req, res) {
             try {
                                 
                 // Remove Id from the body because it is insertion
-                delete req.body.Id;
-                const dbResult = db.insert(entity).values(req.body).returning();
+                delete reqBody.Id;
+
+                console.log(`API: Method: POST: entity: `, entity);
+
+                const dbResult = await db.insert(entity).values(reqBody).returning();
+                console.log("API: Method: POST:  result", dbResult);
 
                 if(result.length > 0) {
                     return res.status(200).json(dbResult[0]);
@@ -57,14 +65,13 @@ export default async function handler(req, res) {
                 return res.status(200).send({});
                 
             } catch (err) {
-                console.error("Error: ", err);
+                console.log("Error: ", err);
                 return res.status(500).send(`Error inserting entity ${entityName} -> ${err}`);
             }
             break;
 
         case "PUT":
             try {
-                const reqBody = req.body;
                 const id = reqBody.Id;
                 const dbResult = await db.update(entity).set(reqBody).where(eq(entity.Id, id)).returning();
                 
@@ -85,7 +92,7 @@ export default async function handler(req, res) {
             try {
 
                 // console.log("API: entity", entity);
-                const id = req.body.Id;
+                const id = reqBody.Id;
                 const dbResult = awaitdb.delete(entity).where(eq(entity.Id, id)).returning();
                 if(dbResult.length > 0) {
                     return res.status(200).json(dbResult[0]);
@@ -96,6 +103,5 @@ export default async function handler(req, res) {
                 return res.status(500).send(`Error to delete entity ${entityName} -> ${err}`);
             }
             break;
-
     }
 }

@@ -2,7 +2,7 @@ import { db } from '@/lib/db/drizzle';
 import { eq } from "drizzle-orm";
 
 import * as dbSchema from '@/lib/schemas/pg_db/schema';
-import { Module } from '@/lib/schemas/pg_db/schema';
+import { meta_Module } from '@/lib/schemas/pg_db/schema';
 
 export default async function handler(req, res) {
     console.log("API: hello from processEntityItem");
@@ -10,12 +10,12 @@ export default async function handler(req, res) {
     console.log("API: req.body: ", req.body);
 
 
-    const Module = dbSchema['Module'];
+    const Module = dbSchema['meta_Module'];
     // console.log(`Module:`, Module);
 
-    const qResult = await db.query.Module.findMany({
+    const qResult = await db.query.meta_Module.findMany({
         with: {
-            Entity: true
+            Entity: true // from meta_ModuleRelations 
         },
     });
     console.log(`=================`)
@@ -110,7 +110,7 @@ export default async function handler(req, res) {
 
                 console.log(`includereferences:`, includeReferences);
 
-                const Module = dbSchema['Module'];
+                const Module = dbSchema['meta_Module'];
                 // console.log(`Module:`, Module);
 
                 const qResult = await db.query[entityName].findMany({

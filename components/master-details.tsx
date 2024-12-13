@@ -23,8 +23,8 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
         return;
     }
 
-    const dbSchemaName = fullEntityName?.split(".")[0];
-    const entityName = fullEntityName?.split(".")[1];
+    const dbSchemaName = fullEntityName?.split("_")[0];
+    const entityName = fullEntityName?.split("_")[1];
 
     const [dataGridSchema, setDataGridSchema] = React.useState<{ [key: string]: { type: string, label: string, ref: string } }>({})
 
@@ -160,7 +160,7 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
               </SplitterPanel>
               <SplitterPanel className="flex" size={10} minSize={6} style={{ overflow: 'auto' }}>
 
-                    {/* <Card>
+                    <Card>
                         <Details 
                             data={selectedData} 
                             setData={setSelectedData}
@@ -169,7 +169,7 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
                             pageModeParam={detailsFormMode} 
                             setDetailsFormMode={setDetailsFormMode}
                             />
-                  </Card> */}
+                  </Card>
 
               </SplitterPanel>
           </Splitter>

@@ -76,8 +76,8 @@ export function Details({
             console.log('Details. useEffect. formDataSchema: ', formDataSchema);
             // if(formDataSchema == null || Object.keys(formDataSchema).length === 0) {
 
-            const dbSchemaName = fullEntityName?.split(".")[0];
-            const entityName = fullEntityName?.split(".")[1];
+            const dbSchemaName = fullEntityName?.split("_")[0];
+            const entityName = fullEntityName?.split("_")[1];
             const dataSchemaModule = await import(`../lib/schemas/${dbSchemaName}/${entityName}.details.js`);
             console.log("dataSchemaModule: ", dataSchemaModule);
             const uiSchemaModule = await import(`../lib/schemas/${dbSchemaName}/${entityName}.detailsUi.js`);
