@@ -10,12 +10,13 @@ import { Toolbar } from "primereact/toolbar";
 import React from "react";
 import { Details } from "./details";
 import { PageMode } from "@/lib/common/enums";
+import { InputText } from "primereact/inputtext";
 
 
 /// MasterDetails component
 /// @param {string} fullEntityName - full entity name including schema name: meta.DwhConfig
 
-export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string}>) {
+export function MasterDetails({fullEntityName}) {
 
     console.log("MasterDetails: ", fullEntityName);
 
@@ -26,12 +27,17 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
     const dbSchemaName = fullEntityName?.split("_")[0];
     const entityName = fullEntityName?.split("_")[1];
 
-    const [dataGridSchema, setDataGridSchema] = React.useState<{ [key: string]: { type: string, label: string, ref: string } }>({})
+    const [dataGridSchema, setDataGridSchema] = React.useState({})
 
     const [selectedData, setSelectedData] = React.useState({});
+    const [ multiSortMeta, setMultiSortMeta ] = React.useState(null);
+    const [ sortField, setSortField ] = React.useState(null);
+    const [ sortOrder, setSortOrder ] = React.useState(1);
     const [data, setData] = React.useState([]);
     const [ isListUpdateRequired, setIsListUpdateRequired ] = React.useState(true);
     const [ detailsFormMode, setDetailsFormMode ] = React.useState(PageMode.VIEW);
+
+    const [ globalStringFilter, setGlobalStringFilter ] = React.useState("");
 
     
 
@@ -42,22 +48,26 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
             // get dataSchema for the form if it is not loaded yet
             // It can be set during user data table setup, so we must not rewrite it
             let listSchema = dataGridSchema;
-            if(Object.keys(listSchema).length === 0) {
 
-                try {
-                    const listSchemaModule = await import(`../lib/schemas/${dbSchemaName}/${entityName}.list.js`)
-                    listSchema = listSchemaModule.schema;
-                    console.log("listSchema: ", listSchema);
-                    setDataGridSchema(listSchema);
-                } catch (error) {
-                    // Do nothing. Schema is already == {}
-                }
+            try {
+                const listSchemaModule = await import(`../lib/schemas/${dbSchemaName}/${entityName}.list.js`)
+                listSchema = listSchemaModule.schema;
+                console.log("listSchema: ", listSchema);
+                setDataGridSchema(listSchema);
+            } catch (error) {
+                // Do nothing. Schema is already == {}
             }
 
             // Define which columns to get from DB
             const columns = Object.keys(listSchema).map((key) => key).join(", ");
 
             // Define which foreign data to get from DB
+            const reqBody = { 
+                include: [],
+                filter: {                    
+                }
+            };
+
             const include = [];
             for(const key in listSchema) {
 
@@ -74,16 +84,22 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
                     include.push(ref);
                     const refColumns = Object.keys(ref).map((key) => key).join(", ");                    
                 }
+            }            
+            reqBody.include = include;
+
+            if(globalStringFilter !== "") {
+                reqBody.filter.globalSearchString = globalStringFilter;
             }
-            const reqBody = {
-                include: include,
-            }
+
+            console.log(`fullEntityName before fetch: `, fullEntityName);
             const result = await fetch(`/api/getEntityItems?fullEntityName=${fullEntityName}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(reqBody),
                 });
             const data = await result.json();
+
+            console.log("DataTable Data: ", data);
             setData(data)
             if (data.length > 0 && Object.keys(selectedData).length === 0) {
                 // Set position on the first row
@@ -97,6 +113,10 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
         loadData();
             
     }, [isListUpdateRequired, fullEntityName]);
+
+    const onGlobalStringFilterChange = (e) => {
+        setGlobalStringFilter(e.target.value);
+    }
 
     const toolbarLeft = (
         <React.Fragment>
@@ -112,7 +132,11 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
             <Button icon="pi pi-pencil" className="p-button-help p-mr-2" />
             <Button icon="pi pi-trash" className="p-button-danger p-mr-2" />
             <Button icon="pi pi-refresh" className="p-button-info p-mr-2" />
-            <Button icon="pi pi-search" className="p-button-warning p-mr-2" />
+            <InputText placeholder="Search" onChange={onGlobalStringFilterChange} />
+            <Button icon="pi pi-search" className="p-button-info p-mr-2" onClick={() => {
+                console.log("Search clicked");
+                setIsListUpdateRequired(true);
+            }}/>
         </React.Fragment>
     )
 
@@ -126,11 +150,21 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
                             }}>Refresh</Button>
                       <DataTable  
                           selectionMode={"single"}
-                          value={data}
                           selection={selectedData}
+                          value={data}                          
                           paginator
                           rows={10}
                           rowsPerPageOptions={[10, 15, 30, 50]}
+                          multiSortMeta={multiSortMeta}
+                          sortMode="multiple"
+                          sortField={sortField}
+                          onSort={(e) => {
+                                console.log("Sort event: ", e);
+                                setMultiSortMeta(e.multiSortMeta);
+                                // setSortField(e.sortField);
+                                // setSortOrder(e.sortOrder);
+                            }}
+                          sortOrder={sortOrder}
                           onSelectionChange={(e) => {
                               if (e.value !== null && e.value !== undefined) {
                                   console.log("Selected Data 1: ", e.value);
@@ -150,7 +184,8 @@ export function MasterDetails({fullEntityName}: Readonly<{fullEntityName: string
                             return (
                                 <Column 
                                     field={key} 
-                                    header={colParamValues.label} 
+                                    header={colParamValues.label}
+                                    sortable={colParamValues.sortable === true}
                                     key={i}
                                 ></Column>
                             )

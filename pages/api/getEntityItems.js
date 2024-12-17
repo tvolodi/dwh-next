@@ -1,8 +1,41 @@
 import { db } from '@/lib/db/drizzle';
-import { eq } from "drizzle-orm";
+import { eq, like, ilike, or } from "drizzle-orm";
 
 import * as dbSchema from '@/lib/schemas/pg_db/schema';
 import { meta_Module } from '@/lib/schemas/pg_db/schema';
+
+/// Service handler to process DB requests
+/// @param req - request object
+const req = {
+    query: {
+        fullEntityName: "meta_Entity"
+    },
+    body: {
+        columns: ["Id", "Code", "Name", "Module.Name", "Notes"],
+        include: ["meta_Module"],
+        filter: {
+            globalStringFilter: "test",
+            columnFilters: [
+                {
+                    column: "Name",
+                    filter: "like",
+                    value: "test"
+                },
+                {
+                    column: "Code",
+                    filter: "eq",
+                    value: "test"
+                }
+            ]
+        },
+        sort: [{column: "Name", order: "asc"}, {column: "Code", order: "desc"}],
+        page: 1,
+        pageSize: 10
+    }
+}
+
+/// @param res - response object
+
 
 export default async function handler(req, res) {
     console.log("API: hello from processEntityItem");
@@ -10,20 +43,21 @@ export default async function handler(req, res) {
     console.log("API: req.body: ", req.body);
 
 
-    const Module = dbSchema['meta_Module'];
+    // const Module = dbSchema['meta_Module'];
     // console.log(`Module:`, Module);
 
-    const qResult = await db.query.meta_Module.findMany({
-        with: {
-            Entity: true // from meta_ModuleRelations 
-        },
-    });
-    console.log(`=================`)
-    console.log("API: dbResult 1: ", qResult);
-    console.log(`=================`)
+    // const withObject = {}
+    // withObject['Module'] = true;
+    // const optionsObject = {};
+    // optionsObject['with'] = withObject;
+
+    // const qResult = await db.query.meta_Entity.findMany(optionsObject);
+    // console.log(`=================`)
+    // console.log("API: dbResult 1: ", qResult);
+    // console.log(`=================`)
 
 
-    return res.status(200).json(qResult);
+    // return res.status(200).json(qResult);
 
     const fullEntityName = req.query.fullEntityName;
     if(!fullEntityName) {
@@ -49,17 +83,19 @@ export default async function handler(req, res) {
             return res.status(200).json({message: "Hello from Save entity item GET method routine import"});
         }
     } catch (err) {
-        console.log(`Error with import custom module ${entityName} for ${method} method. Stdaard processing will be used.`);
+        console.log(`Error with import custom module ${entityName} for ${method} method. Standard processing will be used.`);
         // Custom processing is absent. Continue with standard processing
     }
 
-    const entity = dbSchema[entityName];
+    const entity = dbSchema[fullEntityName];
   
     switch (method) {
         case "GET":
 
             try{
-                const qResult = await db.query[entityName].findMany();
+                const qResult = await db.query[fullEntityName].findMany({
+                    with: {}
+                });
                 // const qResult = await db.select().from(entity);
                 return res.status(200).json(qResult);    
             } catch (err) {
@@ -81,23 +117,38 @@ export default async function handler(req, res) {
 
                 const includeReferences = {};
                 if (include) {
-                    for (const ref of include) {
-                        const refEntityName = ref.split(".")[1];
-                        const entity = dbSchema[refEntityName];
-                        includeReferences[entity] = true;
+                    for (let i=0; i<include.length; i++) {
+                        let refEntityName = include[i];
+                        if(refEntityName.includes('_')){
+                            refEntityName = refEntityName.split("_")[1];
+                        } 
+                        includeReferences[refEntityName] = true;
                     }
                 }
 
-
-                if (!include) {
-                    include = [];
-                }
                 if (!columns) {
                     columns = "*";
                 }
                 if (!filter) {
                     filter = {};
+                    filter.where = {};
+                } else {
+
+                    let searchString = filter.globalSearchString;
+                    let searchExpressionArr = [];
+                    if (searchString) {                        
+                        Object.keys(entity).forEach((key) => {
+                            if (entity[key].dataType === "string") {
+                                const filterExpression = ilike(entity[key], `%${searchString}%`);
+                                searchExpressionArr.push(filterExpression);
+                            }
+                        })
+                    }
+                    filter.where = or(...searchExpressionArr);                    
                 }
+
+                console.log(`filter:`, filter);
+
                 if (!sort) {
                     sort = {};
                 }
@@ -108,16 +159,19 @@ export default async function handler(req, res) {
                     pageSize = 10;
                 }
 
-                console.log(`includereferences:`, includeReferences);
+                console.log(`includeReferences:`, includeReferences);
 
-                const Module = dbSchema['meta_Module'];
-                // console.log(`Module:`, Module);
-
-                const qResult = await db.query[entityName].findMany({
-                    with: {
-                        Module: true
-                    },
+                const qResult = await db.query[fullEntityName].findMany({
+                   with: includeReferences,
+                   where: filter.where,
                 });
+
+
+                // ({
+                //     with: {
+                //         Module: true
+                //     },
+                // });
                 console.log(`=================`)
                 console.log("API: dbResult: ", qResult);
                 console.log(`=================`)
@@ -125,23 +179,10 @@ export default async function handler(req, res) {
                     return res.status(200).json(qResult);
                 }
                 return res.status(200).json([{}]);
-
-                // db.select().from(entity).where(filter).orderBy(sort).page(page)
-                // .then((result) => {
-                //     console.log("API: method: POST: result", result);
-                //     return res.status(200).json(result);
-                // })
-                // .catch((err) => {
-                //     console.log("Error: ", err);
-                //     return res.status(500).send(`${err}`);
-                // });
             } catch (err) {
                 console.error("Error: ", err);
                 return res.status(500).send(`Error to get entity list for ${entityName} -> `, err);
             }
-
-
-            
             break;
 
     }

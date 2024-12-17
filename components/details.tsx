@@ -36,10 +36,6 @@ export function Details({
 
     const savedData = data;
 
-    console.log('Details. Data come  from list: ', data);
-    console.log('fullEntityName: ', fullEntityName);
-    console.log('pageModeParam: ', pageModeParam);
-
     const [ formData, setFormData] = React.useState(data);
     
     // Load schema for data description for the form
@@ -73,15 +69,11 @@ export function Details({
             setFormData(data);        
 
             // Load schema for data description for the form
-            console.log('Details. useEffect. formDataSchema: ', formDataSchema);
-            // if(formDataSchema == null || Object.keys(formDataSchema).length === 0) {
-
             const dbSchemaName = fullEntityName?.split("_")[0];
             const entityName = fullEntityName?.split("_")[1];
             const dataSchemaModule = await import(`../lib/schemas/${dbSchemaName}/${entityName}.details.js`);
             console.log("dataSchemaModule: ", dataSchemaModule);
             const uiSchemaModule = await import(`../lib/schemas/${dbSchemaName}/${entityName}.detailsUi.js`);
-            console.log("uiSchemaModule: ", uiSchemaModule);
             
             const dataSchema = dataSchemaModule.schema;
             // Load option items for select fields
@@ -133,9 +125,6 @@ export function Details({
                 () => {
                     setFormMode(PageMode.EDIT);
                 }
-                // () => {
-                //     router.push(`/workspace/dwh-config/${id}?mode=${PageMode.EDIT}`);
-                // }
             }/>
             <Button icon="pi pi-trash" className="p-button-danger p-mr-2" onClick={
                 () => {
@@ -249,7 +238,6 @@ export function Details({
                 if(toast && toast.current && toast.current.show) {
                     toast.current?.show({ severity: 'info', summary: 'Rejected', detail: 'You have rejected' });
                 }
-                // alert('You have rejected');
             },
             acceptClassName: 'p-button-danger',
         })

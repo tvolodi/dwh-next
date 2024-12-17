@@ -1,6 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## This application is for ETL management in DWH systems 
+### (+ try new js+react+next.js technologies (for me at least))
 
-## Getting Started
+## How it works
+### Main concepts:
+1. JS as basis - accent mainly on GUI. DB processing is mainly on DB server and can be put into separate node.js processes. Plus JS is dynamic and it is simpler to design flexible code without tonns of abstraction layers.
+1. Usage of VC IDE for application object design. Many objects are described in js files and not in DB tables, where they are not accessable to Visual Code.
+1. Extensive usage of js files instead of json to use VC navigation to external objects from IDE.
+1. Include js descriptions as source code into the application core hooks.
+1. As a result DB schema is described as ORM schema but not in the DB tables (as Table, Attribute tables)
+1. Prefer JS to TS. Simpler realization for dynamic code.
+1. Development consists of two fase: development -> delivery. No development in production! It sounds good but in real life no one serious project developing in production.
+
+As a result: the application has a core and a bunch of settings in js, json and DB files. Usually it is some schema.
+
+Where schemas uses:
+1. Main side menu.
+2. Database table descriptions.(drizzle ORM).
+3. Datagrid description: [entity].list.js
+4. Element details panel: jsonform (https://jsonforms.io/)
+4.1. [entity].details.js - data description
+4.2. [entity].detailsUi.js - UI description
+
+## Schemas description
+### ENTITY.list.js
+
+### ENTITY.details.js
+
+### ENTITY.detailsUi.js
+
+
+## Start development
 
 First, run the development server:
 
@@ -16,21 +45,4 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

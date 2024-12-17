@@ -30,7 +30,7 @@
     ".next/types/**/*.ts", 
     "lib/db/drizzle.js", 
     "app/workspace/(meta)/dwh-config/page.jsx", 
-    "components/master-details.tsx", 
+    "components/master-details.jsx", 
     "components/details.js", 
     "lib/ErrorBoundary.jsx", 
     "pages/api/processEntityItem.js", 
