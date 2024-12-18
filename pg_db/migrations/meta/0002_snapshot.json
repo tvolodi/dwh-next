@@ -1,0 +1,349 @@
+{
+  "id": "8c70047a-8f65-41da-b46c-e14c266df26f",
+  "prevId": "c47829c8-b11c-4ac4-9f05-b09e1ea19998",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "core.OrgUnits": {
+      "name": "OrgUnits",
+      "schema": "core",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "BIN": {
+          "name": "BIN",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CodeFromExtAcctSys": {
+          "name": "CodeFromExtAcctSys",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Description": {
+          "name": "Description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ExternalId": {
+          "name": "ExternalId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Group": {
+          "name": "Group",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "KBE": {
+          "name": "KBE",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ParentId": {
+          "name": "ParentId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Prefix": {
+          "name": "Prefix",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "OrgUnits_ParentId_OrgUnits_Id_fk": {
+          "name": "OrgUnits_ParentId_OrgUnits_Id_fk",
+          "tableFrom": "OrgUnits",
+          "tableTo": "OrgUnits",
+          "schemaTo": "core",
+          "columnsFrom": [
+            "ParentId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "OrgUnits_BIN_unique": {
+          "name": "OrgUnits_BIN_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "BIN"
+          ]
+        },
+        "OrgUnits_Code_unique": {
+          "name": "OrgUnits_Code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Code"
+          ]
+        },
+        "OrgUnits_ExternalId_unique": {
+          "name": "OrgUnits_ExternalId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "ExternalId"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "dwh-meta.DwhConfigs": {
+      "name": "DwhConfigs",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ParamValue": {
+          "name": "ParamValue",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ExtendedValue": {
+          "name": "ExtendedValue",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "DwhConfigs_Code_unique": {
+          "name": "DwhConfigs_Code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "dwh-meta.Entities": {
+      "name": "Entities",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ModuleId": {
+          "name": "ModuleId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Entities_ModuleId_Modules_Id_fk": {
+          "name": "Entities_ModuleId_Modules_Id_fk",
+          "tableFrom": "Entities",
+          "tableTo": "Modules",
+          "schemaTo": "dwh-meta",
+          "columnsFrom": [
+            "ModuleId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Entities_Code_unique": {
+          "name": "Entities_Code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "dwh-meta.LastProcessedRecords": {
+      "name": "LastProcessedRecords",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "SchemaName": {
+          "name": "SchemaName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TableName": {
+          "name": "TableName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "LastProcessedId": {
+          "name": "LastProcessedId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "LastProcessedUuid": {
+          "name": "LastProcessedUuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "LastDT": {
+          "name": "LastDT",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "dwh-meta.Modules": {
+      "name": "Modules",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Modules_Code_unique": {
+          "name": "Modules_Code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {
+    "core": "core",
+    "dwh-meta": "dwh-meta"
+  },
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

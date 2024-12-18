@@ -6,33 +6,33 @@ import { meta_Module } from '@/lib/schemas/pg_db/schema';
 
 /// Service handler to process DB requests
 /// @param req - request object
-const req = {
-    query: {
-        fullEntityName: "meta_Entity"
-    },
-    body: {
-        columns: ["Id", "Code", "Name", "Module.Name", "Notes"],
-        include: ["meta_Module"],
-        filter: {
-            globalStringFilter: "test",
-            columnFilters: [
-                {
-                    column: "Name",
-                    filter: "like",
-                    value: "test"
-                },
-                {
-                    column: "Code",
-                    filter: "eq",
-                    value: "test"
-                }
-            ]
-        },
-        sort: [{column: "Name", order: "asc"}, {column: "Code", order: "desc"}],
-        page: 1,
-        pageSize: 10
-    }
-}
+// const req = {
+//     query: {
+//         fullEntityName: "meta_Entity"
+//     },
+//     body: {
+//         columns: ["Id", "Code", "Name", "Module.Name", "Notes"],
+//         include: ["meta_Module"],
+//         filter: {
+//             globalStringFilter: "test",
+//             columnFilters: [
+//                 {
+//                     column: "Name",
+//                     filter: "like",
+//                     value: "test"
+//                 },
+//                 {
+//                     column: "Code",
+//                     filter: "eq",
+//                     value: "test"
+//                 }
+//             ]
+//         },
+//         sort: [{column: "Name", order: "asc"}, {column: "Code", order: "desc"}],
+//         page: 1,
+//         pageSize: 10
+//     }
+// }
 
 /// @param res - response object
 

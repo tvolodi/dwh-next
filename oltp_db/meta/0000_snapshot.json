@@ -1,0 +1,4530 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "prevId": "",
+  "version": "5",
+  "dialect": "mysql",
+  "tables": {
+    "ActionLogConfig": {
+      "name": "ActionLogConfig",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "EntityType": {
+          "autoincrement": false,
+          "name": "EntityType",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ActionType": {
+          "autoincrement": false,
+          "name": "ActionType",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Enabled": {
+          "autoincrement": false,
+          "name": "Enabled",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "ActionLogConfig_Id": {
+          "name": "ActionLogConfig_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "IX_ActionLogConfig_EntityType_ActionType": {
+          "name": "IX_ActionLogConfig_EntityType_ActionType",
+          "columns": [
+            "EntityType",
+            "ActionType"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "ActionLogs": {
+      "name": "ActionLogs",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ModuleName": {
+          "autoincrement": false,
+          "name": "ModuleName",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "UserId": {
+          "autoincrement": false,
+          "name": "UserId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "EntityId": {
+          "autoincrement": false,
+          "name": "EntityId",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ActionTime": {
+          "autoincrement": false,
+          "name": "ActionTime",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ActionType": {
+          "autoincrement": false,
+          "name": "ActionType",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Details": {
+          "autoincrement": false,
+          "name": "Details",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "EntityType": {
+          "autoincrement": false,
+          "name": "EntityType",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "ActionLogs_Id": {
+          "name": "ActionLogs_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_ActionLogs_UserId": {
+          "name": "IX_ActionLogs_UserId",
+          "columns": [
+            "UserId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_ActionLogs_Users_UserId": {
+          "name": "FK_ActionLogs_Users_UserId",
+          "tableFrom": "ActionLogs",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "ColumnChangesLogs": {
+      "name": "ColumnChangesLogs",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TableName": {
+          "autoincrement": false,
+          "name": "TableName",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "RowGuid": {
+          "autoincrement": false,
+          "name": "RowGuid",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ColumnName": {
+          "autoincrement": false,
+          "name": "ColumnName",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "LastChangedOn": {
+          "autoincrement": false,
+          "name": "LastChangedOn",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "ColumnChangesLogs_Id": {
+          "name": "ColumnChangesLogs_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "IX_ColumnChangesLogs_RowGuid_TableName_ColumnName": {
+          "name": "IX_ColumnChangesLogs_RowGuid_TableName_ColumnName",
+          "columns": [
+            "RowGuid",
+            "TableName",
+            "ColumnName"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "Countries": {
+      "name": "Countries",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CodeISO": {
+          "autoincrement": false,
+          "name": "CodeISO",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CodeDigital": {
+          "autoincrement": false,
+          "name": "CodeDigital",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "autoincrement": false,
+          "name": "Name",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "IsRemoved": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "IsRemoved",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "Countries_Id": {
+          "name": "Countries_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "CurrentGeoLocations": {
+      "name": "CurrentGeoLocations",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "AppType": {
+          "autoincrement": false,
+          "name": "AppType",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "EntityType": {
+          "autoincrement": false,
+          "name": "EntityType",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "EntityGuidId": {
+          "autoincrement": false,
+          "name": "EntityGuidId",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "EntityIntId": {
+          "autoincrement": false,
+          "name": "EntityIntId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "GeoLocationId": {
+          "autoincrement": false,
+          "name": "GeoLocationId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CreatedById": {
+          "autoincrement": false,
+          "name": "CreatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Created": {
+          "autoincrement": false,
+          "name": "Created",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "UpdatedById": {
+          "autoincrement": false,
+          "name": "UpdatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Updated": {
+          "autoincrement": false,
+          "name": "Updated",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "CurrentGeoLocations_Id": {
+          "name": "CurrentGeoLocations_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_CurrentGeoLocations_GeoLocationId": {
+          "name": "IX_CurrentGeoLocations_GeoLocationId",
+          "columns": [
+            "GeoLocationId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_CurrentGeoLocations_GeoLocations_GeoLocationId": {
+          "name": "FK_CurrentGeoLocations_GeoLocations_GeoLocationId",
+          "tableFrom": "CurrentGeoLocations",
+          "tableTo": "GeoLocations",
+          "columnsFrom": [
+            "GeoLocationId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {
+        "IX_CurrentGeoLocations_EntityType_EntityGuidId": {
+          "name": "IX_CurrentGeoLocations_EntityType_EntityGuidId",
+          "columns": [
+            "EntityType",
+            "EntityGuidId"
+          ]
+        },
+        "IX_CurrentGeoLocations_EntityType_EntityIntId": {
+          "name": "IX_CurrentGeoLocations_EntityType_EntityIntId",
+          "columns": [
+            "EntityType",
+            "EntityIntId"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "EntityTypes": {
+      "name": "EntityTypes",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "EntityName": {
+          "autoincrement": false,
+          "name": "EntityName",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ModuleName": {
+          "autoincrement": false,
+          "name": "ModuleName",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "TableName": {
+          "autoincrement": false,
+          "name": "TableName",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "EntityTypes_Id": {
+          "name": "EntityTypes_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "ExternalUserRoles": {
+      "name": "ExternalUserRoles",
+      "columns": {
+        "ExternalUserId": {
+          "autoincrement": false,
+          "name": "ExternalUserId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "RoleId": {
+          "autoincrement": false,
+          "name": "RoleId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "RoleId1": {
+          "autoincrement": false,
+          "name": "RoleId1",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "ExternalUserRoles_ExternalUserId_RoleId": {
+          "name": "ExternalUserRoles_ExternalUserId_RoleId",
+          "columns": [
+            "ExternalUserId",
+            "RoleId"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_ExternalUserRoles_RoleId": {
+          "name": "IX_ExternalUserRoles_RoleId",
+          "columns": [
+            "RoleId"
+          ],
+          "isUnique": false
+        },
+        "IX_ExternalUserRoles_RoleId1": {
+          "name": "IX_ExternalUserRoles_RoleId1",
+          "columns": [
+            "RoleId1"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_ExternalUserRoles_Roles_RoleId": {
+          "name": "FK_ExternalUserRoles_Roles_RoleId",
+          "tableFrom": "ExternalUserRoles",
+          "tableTo": "Roles",
+          "columnsFrom": [
+            "RoleId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "FK_ExternalUserRoles_Roles_RoleId1": {
+          "name": "FK_ExternalUserRoles_Roles_RoleId1",
+          "tableFrom": "ExternalUserRoles",
+          "tableTo": "Roles",
+          "columnsFrom": [
+            "RoleId1"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "GeoActionLogs": {
+      "name": "GeoActionLogs",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ActionType": {
+          "autoincrement": false,
+          "name": "ActionType",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "OccuredAt": {
+          "autoincrement": false,
+          "name": "OccuredAt",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "UserId": {
+          "autoincrement": false,
+          "name": "UserId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ConnectedGeoId": {
+          "autoincrement": false,
+          "name": "ConnectedGeoId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "GeoActionLogs_Id": {
+          "name": "GeoActionLogs_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_GeoActionLogs_ConnectedGeoId": {
+          "name": "IX_GeoActionLogs_ConnectedGeoId",
+          "columns": [
+            "ConnectedGeoId"
+          ],
+          "isUnique": false
+        },
+        "IX_GeoActionLogs_UserId": {
+          "name": "IX_GeoActionLogs_UserId",
+          "columns": [
+            "UserId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_GeoActionLogs_GeoLocations_ConnectedGeoId": {
+          "name": "FK_GeoActionLogs_GeoLocations_ConnectedGeoId",
+          "tableFrom": "GeoActionLogs",
+          "tableTo": "GeoLocations",
+          "columnsFrom": [
+            "ConnectedGeoId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "FK_GeoActionLogs_Users_UserId": {
+          "name": "FK_GeoActionLogs_Users_UserId",
+          "tableFrom": "GeoActionLogs",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "GeoLocations": {
+      "name": "GeoLocations",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Lat": {
+          "autoincrement": false,
+          "name": "Lat",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Lng": {
+          "autoincrement": false,
+          "name": "Lng",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Accuracy": {
+          "autoincrement": false,
+          "name": "Accuracy",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "RegisteredAt": {
+          "autoincrement": false,
+          "name": "RegisteredAt",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "AppType": {
+          "autoincrement": false,
+          "name": "AppType",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "EntityType": {
+          "autoincrement": false,
+          "name": "EntityType",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "EntityGuidId": {
+          "autoincrement": false,
+          "name": "EntityGuidId",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "EntityIntId": {
+          "autoincrement": false,
+          "name": "EntityIntId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CreatedById": {
+          "autoincrement": false,
+          "name": "CreatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Created": {
+          "autoincrement": false,
+          "name": "Created",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "UpdatedById": {
+          "autoincrement": false,
+          "name": "UpdatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Updated": {
+          "autoincrement": false,
+          "name": "Updated",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "GeoEntityType": {
+          "autoincrement": false,
+          "name": "GeoEntityType",
+          "type": "varchar(15)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "DependentEntityId": {
+          "autoincrement": false,
+          "name": "DependentEntityId",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Details": {
+          "autoincrement": false,
+          "name": "Details",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "GeoLocations_Id": {
+          "name": "GeoLocations_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "LocationAccesses": {
+      "name": "LocationAccesses",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "LocationId": {
+          "autoincrement": false,
+          "name": "LocationId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Discriminator": {
+          "autoincrement": false,
+          "name": "Discriminator",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "GrantedOrgUnitId": {
+          "autoincrement": false,
+          "name": "GrantedOrgUnitId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "UserId": {
+          "autoincrement": false,
+          "name": "UserId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ExternalUserId": {
+          "autoincrement": false,
+          "name": "ExternalUserId",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "LocationAccesses_Id": {
+          "name": "LocationAccesses_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_LocationAccesses_GrantedOrgUnitId": {
+          "name": "IX_LocationAccesses_GrantedOrgUnitId",
+          "columns": [
+            "GrantedOrgUnitId"
+          ],
+          "isUnique": false
+        },
+        "IX_LocationAccesses_LocationId": {
+          "name": "IX_LocationAccesses_LocationId",
+          "columns": [
+            "LocationId"
+          ],
+          "isUnique": false
+        },
+        "IX_LocationAccesses_UserId": {
+          "name": "IX_LocationAccesses_UserId",
+          "columns": [
+            "UserId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_LocationAccesses_Locations_LocationId": {
+          "name": "FK_LocationAccesses_Locations_LocationId",
+          "tableFrom": "LocationAccesses",
+          "tableTo": "Locations",
+          "columnsFrom": [
+            "LocationId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "FK_LocationAccesses_OrgUnits_GrantedOrgUnitId": {
+          "name": "FK_LocationAccesses_OrgUnits_GrantedOrgUnitId",
+          "tableFrom": "LocationAccesses",
+          "tableTo": "OrgUnits",
+          "columnsFrom": [
+            "GrantedOrgUnitId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "FK_LocationAccesses_Users_UserId": {
+          "name": "FK_LocationAccesses_Users_UserId",
+          "tableFrom": "LocationAccesses",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {
+        "IX_LocationAccesses_LocationId_GrantedOrgUnitId": {
+          "name": "IX_LocationAccesses_LocationId_GrantedOrgUnitId",
+          "columns": [
+            "LocationId",
+            "GrantedOrgUnitId"
+          ]
+        },
+        "IX_LocationAccesses_LocationId_UserId": {
+          "name": "IX_LocationAccesses_LocationId_UserId",
+          "columns": [
+            "LocationId",
+            "UserId"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "LocationAccesses_tracking": {
+      "name": "LocationAccesses_tracking",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "update_scope_id": {
+          "autoincrement": false,
+          "name": "update_scope_id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timestamp": {
+          "autoincrement": false,
+          "name": "timestamp",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sync_row_is_tombstone": {
+          "default": "'b''0'''",
+          "autoincrement": false,
+          "name": "sync_row_is_tombstone",
+          "type": "bit(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_change_datetime": {
+          "autoincrement": false,
+          "name": "last_change_datetime",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "LocationAccesses_tracking_Id": {
+          "name": "LocationAccesses_tracking_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "LocationInfo": {
+      "name": "LocationInfo",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "LocationId": {
+          "autoincrement": false,
+          "name": "LocationId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ResponsibleUserId": {
+          "autoincrement": false,
+          "name": "ResponsibleUserId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "XIndex": {
+          "autoincrement": false,
+          "name": "XIndex",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "YIndex": {
+          "autoincrement": false,
+          "name": "YIndex",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ZIndex": {
+          "autoincrement": false,
+          "name": "ZIndex",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Length": {
+          "autoincrement": false,
+          "name": "Length",
+          "type": "decimal(65,30)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Width": {
+          "autoincrement": false,
+          "name": "Width",
+          "type": "decimal(65,30)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Height": {
+          "autoincrement": false,
+          "name": "Height",
+          "type": "decimal(65,30)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Volume": {
+          "autoincrement": false,
+          "name": "Volume",
+          "type": "decimal(65,30)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "LiftingCapacity": {
+          "autoincrement": false,
+          "name": "LiftingCapacity",
+          "type": "decimal(65,30)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "LocationInfo_Id": {
+          "name": "LocationInfo_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_LocationInfo_ResponsibleUserId": {
+          "name": "IX_LocationInfo_ResponsibleUserId",
+          "columns": [
+            "ResponsibleUserId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_LocationInfo_Locations_LocationId": {
+          "name": "FK_LocationInfo_Locations_LocationId",
+          "tableFrom": "LocationInfo",
+          "tableTo": "Locations",
+          "columnsFrom": [
+            "LocationId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "FK_LocationInfo_Users_ResponsibleUserId": {
+          "name": "FK_LocationInfo_Users_ResponsibleUserId",
+          "tableFrom": "LocationInfo",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "ResponsibleUserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {
+        "IX_LocationInfo_LocationId": {
+          "name": "IX_LocationInfo_LocationId",
+          "columns": [
+            "LocationId"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "LocationInfo_tracking": {
+      "name": "LocationInfo_tracking",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "update_scope_id": {
+          "autoincrement": false,
+          "name": "update_scope_id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timestamp": {
+          "autoincrement": false,
+          "name": "timestamp",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sync_row_is_tombstone": {
+          "default": "'b''0'''",
+          "autoincrement": false,
+          "name": "sync_row_is_tombstone",
+          "type": "bit(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_change_datetime": {
+          "autoincrement": false,
+          "name": "last_change_datetime",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "LocationInfo_tracking_Id": {
+          "name": "LocationInfo_tracking_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "LocationOrgUnit": {
+      "name": "LocationOrgUnit",
+      "columns": {
+        "LocationsId": {
+          "autoincrement": false,
+          "name": "LocationsId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "OrgUnitsId": {
+          "autoincrement": false,
+          "name": "OrgUnitsId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "LocationOrgUnit_LocationsId_OrgUnitsId": {
+          "name": "LocationOrgUnit_LocationsId_OrgUnitsId",
+          "columns": [
+            "LocationsId",
+            "OrgUnitsId"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_LocationOrgUnit_OrgUnitsId": {
+          "name": "IX_LocationOrgUnit_OrgUnitsId",
+          "columns": [
+            "OrgUnitsId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_LocationOrgUnit_Locations_LocationsId": {
+          "name": "FK_LocationOrgUnit_Locations_LocationsId",
+          "tableFrom": "LocationOrgUnit",
+          "tableTo": "Locations",
+          "columnsFrom": [
+            "LocationsId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "FK_LocationOrgUnit_OrgUnits_OrgUnitsId": {
+          "name": "FK_LocationOrgUnit_OrgUnits_OrgUnitsId",
+          "tableFrom": "LocationOrgUnit",
+          "tableTo": "OrgUnits",
+          "columnsFrom": [
+            "OrgUnitsId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "LocationTypes": {
+      "name": "LocationTypes",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Name": {
+          "autoincrement": false,
+          "name": "Name",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "IsSystem": {
+          "autoincrement": false,
+          "name": "IsSystem",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CreatedById": {
+          "autoincrement": false,
+          "name": "CreatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Created": {
+          "autoincrement": false,
+          "name": "Created",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "UpdatedById": {
+          "autoincrement": false,
+          "name": "UpdatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Updated": {
+          "autoincrement": false,
+          "name": "Updated",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "LocationTypes_Id": {
+          "name": "LocationTypes_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "LocationTypes_tracking": {
+      "name": "LocationTypes_tracking",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "update_scope_id": {
+          "autoincrement": false,
+          "name": "update_scope_id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timestamp": {
+          "autoincrement": false,
+          "name": "timestamp",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sync_row_is_tombstone": {
+          "default": "'b''0'''",
+          "autoincrement": false,
+          "name": "sync_row_is_tombstone",
+          "type": "bit(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_change_datetime": {
+          "autoincrement": false,
+          "name": "last_change_datetime",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "LocationTypes_tracking_Id": {
+          "name": "LocationTypes_tracking_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "Locations": {
+      "name": "Locations",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Description": {
+          "autoincrement": false,
+          "name": "Description",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ParentId": {
+          "autoincrement": false,
+          "name": "ParentId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "HierarchyLevel": {
+          "autoincrement": false,
+          "name": "HierarchyLevel",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "OrgUnitId": {
+          "autoincrement": false,
+          "name": "OrgUnitId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CenterPointLat": {
+          "autoincrement": false,
+          "name": "CenterPointLat",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CenterPointLong": {
+          "autoincrement": false,
+          "name": "CenterPointLong",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Radius": {
+          "autoincrement": false,
+          "name": "Radius",
+          "type": "double",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CodeFromExtAcctSys": {
+          "autoincrement": false,
+          "name": "CodeFromExtAcctSys",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Created": {
+          "autoincrement": false,
+          "name": "Created",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CreatedById": {
+          "autoincrement": false,
+          "name": "CreatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Updated": {
+          "autoincrement": false,
+          "name": "Updated",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "UpdatedById": {
+          "autoincrement": false,
+          "name": "UpdatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "LocationTypeId": {
+          "autoincrement": false,
+          "name": "LocationTypeId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Enabled": {
+          "default": 1,
+          "autoincrement": false,
+          "name": "Enabled",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "IsTracking": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "IsTracking",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "Locations_Id": {
+          "name": "Locations_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_Locations_LocationTypeId": {
+          "name": "IX_Locations_LocationTypeId",
+          "columns": [
+            "LocationTypeId"
+          ],
+          "isUnique": false
+        },
+        "IX_Locations_OrgUnitId": {
+          "name": "IX_Locations_OrgUnitId",
+          "columns": [
+            "OrgUnitId"
+          ],
+          "isUnique": false
+        },
+        "IX_Locations_ParentId": {
+          "name": "IX_Locations_ParentId",
+          "columns": [
+            "ParentId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_Locations_Locations_ParentId": {
+          "name": "FK_Locations_Locations_ParentId",
+          "tableFrom": "Locations",
+          "tableTo": "Locations",
+          "columnsFrom": [
+            "ParentId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "FK_Locations_LocationTypes_LocationTypeId": {
+          "name": "FK_Locations_LocationTypes_LocationTypeId",
+          "tableFrom": "Locations",
+          "tableTo": "LocationTypes",
+          "columnsFrom": [
+            "LocationTypeId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "FK_Locations_OrgUnits_OrgUnitId": {
+          "name": "FK_Locations_OrgUnits_OrgUnitId",
+          "tableFrom": "Locations",
+          "tableTo": "OrgUnits",
+          "columnsFrom": [
+            "OrgUnitId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "Locations_tracking": {
+      "name": "Locations_tracking",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "update_scope_id": {
+          "autoincrement": false,
+          "name": "update_scope_id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timestamp": {
+          "autoincrement": false,
+          "name": "timestamp",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sync_row_is_tombstone": {
+          "default": "'b''0'''",
+          "autoincrement": false,
+          "name": "sync_row_is_tombstone",
+          "type": "bit(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_change_datetime": {
+          "autoincrement": false,
+          "name": "last_change_datetime",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "Locations_tracking_Id": {
+          "name": "Locations_tracking_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "OrgUnitAccesses": {
+      "name": "OrgUnitAccesses",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "OrgUnitId": {
+          "autoincrement": false,
+          "name": "OrgUnitId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "UserId": {
+          "autoincrement": false,
+          "name": "UserId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "IsPrimaryOrgUnit": {
+          "autoincrement": false,
+          "name": "IsPrimaryOrgUnit",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "HasChildrenAccess": {
+          "autoincrement": false,
+          "name": "HasChildrenAccess",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Discriminator": {
+          "autoincrement": false,
+          "name": "Discriminator",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "GrantedOrgUnitId": {
+          "autoincrement": false,
+          "name": "GrantedOrgUnitId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ExternalUserId": {
+          "autoincrement": false,
+          "name": "ExternalUserId",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "OrgUnitAccesses_Id": {
+          "name": "OrgUnitAccesses_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_OrgUnitAccesses_GrantedOrgUnitId": {
+          "name": "IX_OrgUnitAccesses_GrantedOrgUnitId",
+          "columns": [
+            "GrantedOrgUnitId"
+          ],
+          "isUnique": false
+        },
+        "IX_OrgUnitAccesses_OrgUnitId": {
+          "name": "IX_OrgUnitAccesses_OrgUnitId",
+          "columns": [
+            "OrgUnitId"
+          ],
+          "isUnique": false
+        },
+        "IX_OrgUnitAccesses_UserId": {
+          "name": "IX_OrgUnitAccesses_UserId",
+          "columns": [
+            "UserId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_OrgUnitAccesses_OrgUnits_GrantedOrgUnitId": {
+          "name": "FK_OrgUnitAccesses_OrgUnits_GrantedOrgUnitId",
+          "tableFrom": "OrgUnitAccesses",
+          "tableTo": "OrgUnits",
+          "columnsFrom": [
+            "GrantedOrgUnitId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "FK_OrgUnitAccesses_OrgUnits_OrgUnitId": {
+          "name": "FK_OrgUnitAccesses_OrgUnits_OrgUnitId",
+          "tableFrom": "OrgUnitAccesses",
+          "tableTo": "OrgUnits",
+          "columnsFrom": [
+            "OrgUnitId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "FK_OrgUnitAccesses_Users_UserId": {
+          "name": "FK_OrgUnitAccesses_Users_UserId",
+          "tableFrom": "OrgUnitAccesses",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {
+        "IX_OrgUnitAccesses_OrgUnitId_GrantedOrgUnitId": {
+          "name": "IX_OrgUnitAccesses_OrgUnitId_GrantedOrgUnitId",
+          "columns": [
+            "OrgUnitId",
+            "GrantedOrgUnitId"
+          ]
+        },
+        "IX_OrgUnitAccesses_OrgUnitId_UserId": {
+          "name": "IX_OrgUnitAccesses_OrgUnitId_UserId",
+          "columns": [
+            "OrgUnitId",
+            "UserId"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "OrgUnitAccesses_tracking": {
+      "name": "OrgUnitAccesses_tracking",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "update_scope_id": {
+          "autoincrement": false,
+          "name": "update_scope_id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timestamp": {
+          "autoincrement": false,
+          "name": "timestamp",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sync_row_is_tombstone": {
+          "default": "'b''0'''",
+          "autoincrement": false,
+          "name": "sync_row_is_tombstone",
+          "type": "bit(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_change_datetime": {
+          "autoincrement": false,
+          "name": "last_change_datetime",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "OrgUnitAccesses_tracking_Id": {
+          "name": "OrgUnitAccesses_tracking_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "OrgUnitCalendars": {
+      "name": "OrgUnitCalendars",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "OrgUnitId": {
+          "autoincrement": false,
+          "name": "OrgUnitId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CalDate": {
+          "autoincrement": false,
+          "name": "CalDate",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "IsWorking": {
+          "autoincrement": false,
+          "name": "IsWorking",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Description": {
+          "autoincrement": false,
+          "name": "Description",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "EndTime": {
+          "autoincrement": false,
+          "name": "EndTime",
+          "type": "time(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "LunchBreakEnd": {
+          "autoincrement": false,
+          "name": "LunchBreakEnd",
+          "type": "time(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "LunchBreakStart": {
+          "autoincrement": false,
+          "name": "LunchBreakStart",
+          "type": "time(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "SecondBreakEnd": {
+          "autoincrement": false,
+          "name": "SecondBreakEnd",
+          "type": "time(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "SecondBreakStart": {
+          "autoincrement": false,
+          "name": "SecondBreakStart",
+          "type": "time(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "StartTime": {
+          "autoincrement": false,
+          "name": "StartTime",
+          "type": "time(6)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "OrgUnitCalendars_Id": {
+          "name": "OrgUnitCalendars_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "FK_OrgUnitCalendars_OrgUnits_OrgUnitId": {
+          "name": "FK_OrgUnitCalendars_OrgUnits_OrgUnitId",
+          "tableFrom": "OrgUnitCalendars",
+          "tableTo": "OrgUnits",
+          "columnsFrom": [
+            "OrgUnitId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {
+        "IX_OrgUnitCalendars_OrgUnitId_CalDate": {
+          "name": "IX_OrgUnitCalendars_OrgUnitId_CalDate",
+          "columns": [
+            "OrgUnitId",
+            "CalDate"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "OrgUnits": {
+      "name": "OrgUnits",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Description": {
+          "autoincrement": false,
+          "name": "Description",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ParentId": {
+          "autoincrement": false,
+          "name": "ParentId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CodeFromExtAcctSys": {
+          "autoincrement": false,
+          "name": "CodeFromExtAcctSys",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "HierarchyLevel": {
+          "autoincrement": false,
+          "name": "HierarchyLevel",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Created": {
+          "autoincrement": false,
+          "name": "Created",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CreatedById": {
+          "autoincrement": false,
+          "name": "CreatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Updated": {
+          "autoincrement": false,
+          "name": "Updated",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "UpdatedById": {
+          "autoincrement": false,
+          "name": "UpdatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Prefix": {
+          "autoincrement": false,
+          "name": "Prefix",
+          "type": "varchar(2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "BIN": {
+          "autoincrement": false,
+          "name": "BIN",
+          "type": "varchar(200)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CostCenter": {
+          "autoincrement": false,
+          "name": "CostCenter",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Enabled": {
+          "default": 1,
+          "autoincrement": false,
+          "name": "Enabled",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ExternalId": {
+          "autoincrement": false,
+          "name": "ExternalId",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Code": {
+          "autoincrement": false,
+          "name": "Code",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Group": {
+          "autoincrement": false,
+          "name": "Group",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "KBE": {
+          "autoincrement": false,
+          "name": "KBE",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "PersonType": {
+          "autoincrement": false,
+          "name": "PersonType",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "StartDate": {
+          "autoincrement": false,
+          "name": "StartDate",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "OrgUnits_Id": {
+          "name": "OrgUnits_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_OrgUnits_ParentId": {
+          "name": "IX_OrgUnits_ParentId",
+          "columns": [
+            "ParentId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_OrgUnits_OrgUnits_ParentId": {
+          "name": "FK_OrgUnits_OrgUnits_ParentId",
+          "tableFrom": "OrgUnits",
+          "tableTo": "OrgUnits",
+          "columnsFrom": [
+            "ParentId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {
+        "IX_OrgUnits_BIN": {
+          "name": "IX_OrgUnits_BIN",
+          "columns": [
+            "BIN"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "OrgUnits_tracking": {
+      "name": "OrgUnits_tracking",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "update_scope_id": {
+          "autoincrement": false,
+          "name": "update_scope_id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timestamp": {
+          "autoincrement": false,
+          "name": "timestamp",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sync_row_is_tombstone": {
+          "default": "'b''0'''",
+          "autoincrement": false,
+          "name": "sync_row_is_tombstone",
+          "type": "bit(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_change_datetime": {
+          "autoincrement": false,
+          "name": "last_change_datetime",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "OrgUnits_tracking_Id": {
+          "name": "OrgUnits_tracking_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "PhoneInfo": {
+      "name": "PhoneInfo",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Vendor": {
+          "autoincrement": false,
+          "name": "Vendor",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Model": {
+          "autoincrement": false,
+          "name": "Model",
+          "type": "varchar(20)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "IMEI": {
+          "autoincrement": false,
+          "name": "IMEI",
+          "type": "char(15)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "PhoneInfo_Id": {
+          "name": "PhoneInfo_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "IX_PhoneInfo_IMEI": {
+          "name": "IX_PhoneInfo_IMEI",
+          "columns": [
+            "IMEI"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "Positions": {
+      "name": "Positions",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Code": {
+          "autoincrement": false,
+          "name": "Code",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "autoincrement": false,
+          "name": "Name",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Created": {
+          "autoincrement": false,
+          "name": "Created",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CreatedById": {
+          "autoincrement": false,
+          "name": "CreatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Updated": {
+          "autoincrement": false,
+          "name": "Updated",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "UpdatedById": {
+          "autoincrement": false,
+          "name": "UpdatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CodeFromExtAcctSys": {
+          "autoincrement": false,
+          "name": "CodeFromExtAcctSys",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CostCenter": {
+          "autoincrement": false,
+          "name": "CostCenter",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "Positions_Id": {
+          "name": "Positions_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "IX_Positions_CodeFromExtAcctSys": {
+          "name": "IX_Positions_CodeFromExtAcctSys",
+          "columns": [
+            "CodeFromExtAcctSys"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "Positions_tracking": {
+      "name": "Positions_tracking",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "update_scope_id": {
+          "autoincrement": false,
+          "name": "update_scope_id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timestamp": {
+          "autoincrement": false,
+          "name": "timestamp",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sync_row_is_tombstone": {
+          "default": "'b''0'''",
+          "autoincrement": false,
+          "name": "sync_row_is_tombstone",
+          "type": "bit(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_change_datetime": {
+          "autoincrement": false,
+          "name": "last_change_datetime",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "Positions_tracking_Id": {
+          "name": "Positions_tracking_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "ProfilePictures": {
+      "name": "ProfilePictures",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "MimeType": {
+          "autoincrement": false,
+          "name": "MimeType",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "FilePath": {
+          "autoincrement": false,
+          "name": "FilePath",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "OriginalFileName": {
+          "autoincrement": false,
+          "name": "OriginalFileName",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "UserId": {
+          "autoincrement": false,
+          "name": "UserId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "ProfilePictures_Id": {
+          "name": "ProfilePictures_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_ProfilePictures_UserId": {
+          "name": "IX_ProfilePictures_UserId",
+          "columns": [
+            "UserId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_ProfilePictures_Users_UserId": {
+          "name": "FK_ProfilePictures_Users_UserId",
+          "tableFrom": "ProfilePictures",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "ProvisionInfoTable": {
+      "name": "ProvisionInfoTable",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "MigrationId": {
+          "autoincrement": false,
+          "name": "MigrationId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "SyncConfiguration": {
+          "autoincrement": false,
+          "name": "SyncConfiguration",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "SyncConfigurationId": {
+          "autoincrement": false,
+          "name": "SyncConfigurationId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "ProvisionInfoTable_Id": {
+          "name": "ProvisionInfoTable_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "Qualifications": {
+      "name": "Qualifications",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Code": {
+          "autoincrement": false,
+          "name": "Code",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "autoincrement": false,
+          "name": "Name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Level": {
+          "autoincrement": false,
+          "name": "Level",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CodeFromExtAcctSys": {
+          "autoincrement": false,
+          "name": "CodeFromExtAcctSys",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ExternalId": {
+          "autoincrement": false,
+          "name": "ExternalId",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "Qualifications_Id": {
+          "name": "Qualifications_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "IX_Qualifications_Code_Level": {
+          "name": "IX_Qualifications_Code_Level",
+          "columns": [
+            "Code",
+            "Level"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "RoleClaims": {
+      "name": "RoleClaims",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "RoleId": {
+          "autoincrement": false,
+          "name": "RoleId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ClaimType": {
+          "autoincrement": false,
+          "name": "ClaimType",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ClaimValue": {
+          "autoincrement": false,
+          "name": "ClaimValue",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "RoleClaims_Id": {
+          "name": "RoleClaims_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_RoleClaims_RoleId": {
+          "name": "IX_RoleClaims_RoleId",
+          "columns": [
+            "RoleId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_RoleClaims_Roles_RoleId": {
+          "name": "FK_RoleClaims_Roles_RoleId",
+          "tableFrom": "RoleClaims",
+          "tableTo": "Roles",
+          "columnsFrom": [
+            "RoleId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "RoleClaims_tracking": {
+      "name": "RoleClaims_tracking",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "update_scope_id": {
+          "autoincrement": false,
+          "name": "update_scope_id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timestamp": {
+          "autoincrement": false,
+          "name": "timestamp",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sync_row_is_tombstone": {
+          "default": "'b''0'''",
+          "autoincrement": false,
+          "name": "sync_row_is_tombstone",
+          "type": "bit(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_change_datetime": {
+          "autoincrement": false,
+          "name": "last_change_datetime",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "RoleClaims_tracking_Id": {
+          "name": "RoleClaims_tracking_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "Roles": {
+      "name": "Roles",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Name": {
+          "autoincrement": false,
+          "name": "Name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Created": {
+          "autoincrement": false,
+          "name": "Created",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CreatedById": {
+          "autoincrement": false,
+          "name": "CreatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Updated": {
+          "autoincrement": false,
+          "name": "Updated",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "UpdatedById": {
+          "autoincrement": false,
+          "name": "UpdatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "Roles_Id": {
+          "name": "Roles_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "IX_Roles_Name": {
+          "name": "IX_Roles_Name",
+          "columns": [
+            "Name"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "Roles_tracking": {
+      "name": "Roles_tracking",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "update_scope_id": {
+          "autoincrement": false,
+          "name": "update_scope_id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timestamp": {
+          "autoincrement": false,
+          "name": "timestamp",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sync_row_is_tombstone": {
+          "default": "'b''0'''",
+          "autoincrement": false,
+          "name": "sync_row_is_tombstone",
+          "type": "bit(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_change_datetime": {
+          "autoincrement": false,
+          "name": "last_change_datetime",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "Roles_tracking_Id": {
+          "name": "Roles_tracking_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "Signatures": {
+      "name": "Signatures",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "DocRole": {
+          "autoincrement": false,
+          "name": "DocRole",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "UserPositionId": {
+          "autoincrement": false,
+          "name": "UserPositionId",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "UserId": {
+          "autoincrement": false,
+          "name": "UserId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "IsAccepted": {
+          "autoincrement": false,
+          "name": "IsAccepted",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "IsRemoved": {
+          "autoincrement": false,
+          "name": "IsRemoved",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "Signatures_Id": {
+          "name": "Signatures_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_Signatures_UserId_UserPositionId": {
+          "name": "IX_Signatures_UserId_UserPositionId",
+          "columns": [
+            "UserId",
+            "UserPositionId"
+          ],
+          "isUnique": false
+        },
+        "IX_Signatures_UserPositionId": {
+          "name": "IX_Signatures_UserPositionId",
+          "columns": [
+            "UserPositionId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_Signatures_UserPositions_UserPositionId": {
+          "name": "FK_Signatures_UserPositions_UserPositionId",
+          "tableFrom": "Signatures",
+          "tableTo": "UserPositions",
+          "columnsFrom": [
+            "UserPositionId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "FK_Signatures_Users_UserId": {
+          "name": "FK_Signatures_Users_UserId",
+          "tableFrom": "Signatures",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "SyncProfiles": {
+      "name": "SyncProfiles",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "UserId": {
+          "autoincrement": false,
+          "name": "UserId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "RoleId": {
+          "autoincrement": false,
+          "name": "RoleId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "OrgUnitId": {
+          "autoincrement": false,
+          "name": "OrgUnitId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "SyncFilterQuery": {
+          "autoincrement": false,
+          "name": "SyncFilterQuery",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "SyncProfiles_Id": {
+          "name": "SyncProfiles_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_SyncProfiles_OrgUnitId": {
+          "name": "IX_SyncProfiles_OrgUnitId",
+          "columns": [
+            "OrgUnitId"
+          ],
+          "isUnique": false
+        },
+        "IX_SyncProfiles_RoleId": {
+          "name": "IX_SyncProfiles_RoleId",
+          "columns": [
+            "RoleId"
+          ],
+          "isUnique": false
+        },
+        "IX_SyncProfiles_UserId": {
+          "name": "IX_SyncProfiles_UserId",
+          "columns": [
+            "UserId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_SyncProfiles_OrgUnits_OrgUnitId": {
+          "name": "FK_SyncProfiles_OrgUnits_OrgUnitId",
+          "tableFrom": "SyncProfiles",
+          "tableTo": "OrgUnits",
+          "columnsFrom": [
+            "OrgUnitId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "FK_SyncProfiles_Roles_RoleId": {
+          "name": "FK_SyncProfiles_Roles_RoleId",
+          "tableFrom": "SyncProfiles",
+          "tableTo": "Roles",
+          "columnsFrom": [
+            "RoleId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "FK_SyncProfiles_Users_UserId": {
+          "name": "FK_SyncProfiles_Users_UserId",
+          "tableFrom": "SyncProfiles",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "SystemConfig": {
+      "name": "SystemConfig",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Category": {
+          "autoincrement": false,
+          "name": "Category",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Code": {
+          "autoincrement": false,
+          "name": "Code",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Value": {
+          "autoincrement": false,
+          "name": "Value",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "IsRemoved": {
+          "autoincrement": false,
+          "name": "IsRemoved",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "SystemConfig_Id": {
+          "name": "SystemConfig_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "IX_SystemConfig_Code_Category": {
+          "name": "IX_SystemConfig_Code_Category",
+          "columns": [
+            "Code",
+            "Category"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "SystemLogs": {
+      "name": "SystemLogs",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Module": {
+          "autoincrement": false,
+          "name": "Module",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Service": {
+          "autoincrement": false,
+          "name": "Service",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "EntityId": {
+          "autoincrement": false,
+          "name": "EntityId",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "EntityType": {
+          "autoincrement": false,
+          "name": "EntityType",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Message": {
+          "autoincrement": false,
+          "name": "Message",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Date": {
+          "autoincrement": false,
+          "name": "Date",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "SystemLogs_Id": {
+          "name": "SystemLogs_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "TempUserCodes": {
+      "name": "TempUserCodes",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ExternalUserId": {
+          "autoincrement": false,
+          "name": "ExternalUserId",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Email": {
+          "autoincrement": false,
+          "name": "Email",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Code": {
+          "autoincrement": false,
+          "name": "Code",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "SentTime": {
+          "autoincrement": false,
+          "name": "SentTime",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "CreatedById": {
+          "autoincrement": false,
+          "name": "CreatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Created": {
+          "autoincrement": false,
+          "name": "Created",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "UpdatedById": {
+          "autoincrement": false,
+          "name": "UpdatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Updated": {
+          "autoincrement": false,
+          "name": "Updated",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "TempUserCodes_Id": {
+          "name": "TempUserCodes_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "IX_TempUserCodes_Code": {
+          "name": "IX_TempUserCodes_Code",
+          "columns": [
+            "Code"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "UserConfigs": {
+      "name": "UserConfigs",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Type": {
+          "autoincrement": false,
+          "name": "Type",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "UserId": {
+          "autoincrement": false,
+          "name": "UserId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Config": {
+          "autoincrement": false,
+          "name": "Config",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "IsGlobal": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "IsGlobal",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Updated": {
+          "default": "'0001-01-01 00:00:00.000000'",
+          "autoincrement": false,
+          "name": "Updated",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "UserConfigs_Id": {
+          "name": "UserConfigs_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_UserConfigs_UserId": {
+          "name": "IX_UserConfigs_UserId",
+          "columns": [
+            "UserId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_UserConfigs_Users_UserId": {
+          "name": "FK_UserConfigs_Users_UserId",
+          "tableFrom": "UserConfigs",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {
+        "IX_UserConfigs_Type_UserId": {
+          "name": "IX_UserConfigs_Type_UserId",
+          "columns": [
+            "Type",
+            "UserId"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "UserEmploymentJournals": {
+      "name": "UserEmploymentJournals",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "UserId": {
+          "autoincrement": false,
+          "name": "UserId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "OrgUnitId": {
+          "autoincrement": false,
+          "name": "OrgUnitId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "LocationId": {
+          "autoincrement": false,
+          "name": "LocationId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "OrderDocumentId": {
+          "autoincrement": false,
+          "name": "OrderDocumentId",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "TaskId": {
+          "autoincrement": false,
+          "name": "TaskId",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "PeriodBegin": {
+          "autoincrement": false,
+          "name": "PeriodBegin",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "PeriodEnd": {
+          "autoincrement": false,
+          "name": "PeriodEnd",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Description": {
+          "autoincrement": false,
+          "name": "Description",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "RecordAuthorId": {
+          "autoincrement": false,
+          "name": "RecordAuthorId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "UserEmploymentJournals_Id": {
+          "name": "UserEmploymentJournals_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_UserEmploymentJournals_LocationId": {
+          "name": "IX_UserEmploymentJournals_LocationId",
+          "columns": [
+            "LocationId"
+          ],
+          "isUnique": false
+        },
+        "IX_UserEmploymentJournals_OrgUnitId": {
+          "name": "IX_UserEmploymentJournals_OrgUnitId",
+          "columns": [
+            "OrgUnitId"
+          ],
+          "isUnique": false
+        },
+        "IX_UserEmploymentJournals_RecordAuthorId": {
+          "name": "IX_UserEmploymentJournals_RecordAuthorId",
+          "columns": [
+            "RecordAuthorId"
+          ],
+          "isUnique": false
+        },
+        "IX_UserEmploymentJournals_UserId": {
+          "name": "IX_UserEmploymentJournals_UserId",
+          "columns": [
+            "UserId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_UserEmploymentJournals_Locations_LocationId": {
+          "name": "FK_UserEmploymentJournals_Locations_LocationId",
+          "tableFrom": "UserEmploymentJournals",
+          "tableTo": "Locations",
+          "columnsFrom": [
+            "LocationId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "FK_UserEmploymentJournals_OrgUnits_OrgUnitId": {
+          "name": "FK_UserEmploymentJournals_OrgUnits_OrgUnitId",
+          "tableFrom": "UserEmploymentJournals",
+          "tableTo": "OrgUnits",
+          "columnsFrom": [
+            "OrgUnitId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "FK_UserEmploymentJournals_Users_RecordAuthorId": {
+          "name": "FK_UserEmploymentJournals_Users_RecordAuthorId",
+          "tableFrom": "UserEmploymentJournals",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "RecordAuthorId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "FK_UserEmploymentJournals_Users_UserId": {
+          "name": "FK_UserEmploymentJournals_Users_UserId",
+          "tableFrom": "UserEmploymentJournals",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "UserPositions": {
+      "name": "UserPositions",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "PositionId": {
+          "autoincrement": false,
+          "name": "PositionId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "UserId": {
+          "autoincrement": false,
+          "name": "UserId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "UserPositions_Id": {
+          "name": "UserPositions_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_UserPositions_PositionId": {
+          "name": "IX_UserPositions_PositionId",
+          "columns": [
+            "PositionId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_UserPositions_Positions_PositionId": {
+          "name": "FK_UserPositions_Positions_PositionId",
+          "tableFrom": "UserPositions",
+          "tableTo": "Positions",
+          "columnsFrom": [
+            "PositionId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "FK_UserPositions_Users_UserId": {
+          "name": "FK_UserPositions_Users_UserId",
+          "tableFrom": "UserPositions",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {
+        "IX_UserPositions_UserId_PositionId": {
+          "name": "IX_UserPositions_UserId_PositionId",
+          "columns": [
+            "UserId",
+            "PositionId"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "UserPositions_tracking": {
+      "name": "UserPositions_tracking",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "update_scope_id": {
+          "autoincrement": false,
+          "name": "update_scope_id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timestamp": {
+          "autoincrement": false,
+          "name": "timestamp",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sync_row_is_tombstone": {
+          "default": "'b''0'''",
+          "autoincrement": false,
+          "name": "sync_row_is_tombstone",
+          "type": "bit(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_change_datetime": {
+          "autoincrement": false,
+          "name": "last_change_datetime",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "UserPositions_tracking_Id": {
+          "name": "UserPositions_tracking_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "UserQualifications": {
+      "name": "UserQualifications",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "UserId": {
+          "autoincrement": false,
+          "name": "UserId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "QualificationId": {
+          "autoincrement": false,
+          "name": "QualificationId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "UserQualifications_Id": {
+          "name": "UserQualifications_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_UserQualifications_QualificationId": {
+          "name": "IX_UserQualifications_QualificationId",
+          "columns": [
+            "QualificationId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_UserQualifications_Qualifications_QualificationId": {
+          "name": "FK_UserQualifications_Qualifications_QualificationId",
+          "tableFrom": "UserQualifications",
+          "tableTo": "Qualifications",
+          "columnsFrom": [
+            "QualificationId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "FK_UserQualifications_Users_UserId": {
+          "name": "FK_UserQualifications_Users_UserId",
+          "tableFrom": "UserQualifications",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {
+        "IX_UserQualifications_UserId_QualificationId": {
+          "name": "IX_UserQualifications_UserId_QualificationId",
+          "columns": [
+            "UserId",
+            "QualificationId"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "UserRoles": {
+      "name": "UserRoles",
+      "columns": {
+        "UserId": {
+          "autoincrement": false,
+          "name": "UserId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "RoleId": {
+          "autoincrement": false,
+          "name": "RoleId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "UserRoles_UserId_RoleId": {
+          "name": "UserRoles_UserId_RoleId",
+          "columns": [
+            "UserId",
+            "RoleId"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_UserRoles_RoleId": {
+          "name": "IX_UserRoles_RoleId",
+          "columns": [
+            "RoleId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_UserRoles_Roles_RoleId": {
+          "name": "FK_UserRoles_Roles_RoleId",
+          "tableFrom": "UserRoles",
+          "tableTo": "Roles",
+          "columnsFrom": [
+            "RoleId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "FK_UserRoles_Users_UserId": {
+          "name": "FK_UserRoles_Users_UserId",
+          "tableFrom": "UserRoles",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "UserRoles_tracking": {
+      "name": "UserRoles_tracking",
+      "columns": {
+        "UserId": {
+          "autoincrement": false,
+          "name": "UserId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "RoleId": {
+          "autoincrement": false,
+          "name": "RoleId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "update_scope_id": {
+          "autoincrement": false,
+          "name": "update_scope_id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timestamp": {
+          "autoincrement": false,
+          "name": "timestamp",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sync_row_is_tombstone": {
+          "default": "'b''0'''",
+          "autoincrement": false,
+          "name": "sync_row_is_tombstone",
+          "type": "bit(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_change_datetime": {
+          "autoincrement": false,
+          "name": "last_change_datetime",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "UserRoles_tracking_UserId_RoleId": {
+          "name": "UserRoles_tracking_UserId_RoleId",
+          "columns": [
+            "UserId",
+            "RoleId"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "UserWorkTeams": {
+      "name": "UserWorkTeams",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "UserId": {
+          "autoincrement": false,
+          "name": "UserId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "WorkTeamId": {
+          "autoincrement": false,
+          "name": "WorkTeamId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "UserWorkTeams_Id": {
+          "name": "UserWorkTeams_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IX_UserWorkTeams_UserId": {
+          "name": "IX_UserWorkTeams_UserId",
+          "columns": [
+            "UserId"
+          ],
+          "isUnique": false
+        },
+        "IX_UserWorkTeams_WorkTeamId": {
+          "name": "IX_UserWorkTeams_WorkTeamId",
+          "columns": [
+            "WorkTeamId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_UserWorkTeams_Users_UserId": {
+          "name": "FK_UserWorkTeams_Users_UserId",
+          "tableFrom": "UserWorkTeams",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "UserId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "FK_UserWorkTeams_WorkTeams_WorkTeamId": {
+          "name": "FK_UserWorkTeams_WorkTeams_WorkTeamId",
+          "tableFrom": "UserWorkTeams",
+          "tableTo": "WorkTeams",
+          "columnsFrom": [
+            "WorkTeamId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "Users": {
+      "name": "Users",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ExternalUserId": {
+          "autoincrement": false,
+          "name": "ExternalUserId",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "FullName": {
+          "autoincrement": false,
+          "name": "FullName",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "PersonnelNumber": {
+          "autoincrement": false,
+          "name": "PersonnelNumber",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Birthdate": {
+          "autoincrement": false,
+          "name": "Birthdate",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "IIN": {
+          "autoincrement": false,
+          "name": "IIN",
+          "type": "char(12)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "PhoneNumber": {
+          "autoincrement": false,
+          "name": "PhoneNumber",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "PhoneInfoId": {
+          "autoincrement": false,
+          "name": "PhoneInfoId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "LocationId": {
+          "autoincrement": false,
+          "name": "LocationId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CurrentUiOrgUnitId": {
+          "autoincrement": false,
+          "name": "CurrentUiOrgUnitId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CurrentUiLocationId": {
+          "autoincrement": false,
+          "name": "CurrentUiLocationId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ExternalUserEnabled": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "ExternalUserEnabled",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Created": {
+          "autoincrement": false,
+          "name": "Created",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CreatedById": {
+          "autoincrement": false,
+          "name": "CreatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Updated": {
+          "autoincrement": false,
+          "name": "Updated",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "UpdatedById": {
+          "autoincrement": false,
+          "name": "UpdatedById",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CodeFromExtAcctSys": {
+          "autoincrement": false,
+          "name": "CodeFromExtAcctSys",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Enabled": {
+          "default": 1,
+          "autoincrement": false,
+          "name": "Enabled",
+          "type": "tinyint(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "FavoritesJson": {
+          "autoincrement": false,
+          "name": "FavoritesJson",
+          "type": "json",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ExternalId": {
+          "autoincrement": false,
+          "name": "ExternalId",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "Users_Id": {
+          "name": "Users_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {
+        "IIN": {
+          "name": "IIN",
+          "columns": [
+            "IIN"
+          ],
+          "isUnique": false
+        },
+        "IX_Users_CurrentUiOrgUnitId": {
+          "name": "IX_Users_CurrentUiOrgUnitId",
+          "columns": [
+            "CurrentUiOrgUnitId"
+          ],
+          "isUnique": false
+        },
+        "IX_Users_LocationId": {
+          "name": "IX_Users_LocationId",
+          "columns": [
+            "LocationId"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "FK_Users_Locations_LocationId": {
+          "name": "FK_Users_Locations_LocationId",
+          "tableFrom": "Users",
+          "tableTo": "Locations",
+          "columnsFrom": [
+            "LocationId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "FK_Users_OrgUnits_CurrentUiOrgUnitId": {
+          "name": "FK_Users_OrgUnits_CurrentUiOrgUnitId",
+          "tableFrom": "Users",
+          "tableTo": "OrgUnits",
+          "columnsFrom": [
+            "CurrentUiOrgUnitId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "FK_Users_PhoneInfo_PhoneInfoId": {
+          "name": "FK_Users_PhoneInfo_PhoneInfoId",
+          "tableFrom": "Users",
+          "tableTo": "PhoneInfo",
+          "columnsFrom": [
+            "PhoneInfoId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "uniqueConstraints": {
+        "IX_Users_CodeFromExtAcctSys": {
+          "name": "IX_Users_CodeFromExtAcctSys",
+          "columns": [
+            "CodeFromExtAcctSys"
+          ]
+        },
+        "IX_Users_ExternalId": {
+          "name": "IX_Users_ExternalId",
+          "columns": [
+            "ExternalId"
+          ]
+        },
+        "IX_Users_ExternalUserId": {
+          "name": "IX_Users_ExternalUserId",
+          "columns": [
+            "ExternalUserId"
+          ]
+        },
+        "IX_Users_PersonnelNumber": {
+          "name": "IX_Users_PersonnelNumber",
+          "columns": [
+            "PersonnelNumber"
+          ]
+        },
+        "IX_Users_PhoneInfoId": {
+          "name": "IX_Users_PhoneInfoId",
+          "columns": [
+            "PhoneInfoId"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    },
+    "Users_tracking": {
+      "name": "Users_tracking",
+      "columns": {
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "update_scope_id": {
+          "autoincrement": false,
+          "name": "update_scope_id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "timestamp": {
+          "autoincrement": false,
+          "name": "timestamp",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sync_row_is_tombstone": {
+          "default": "'b''0'''",
+          "autoincrement": false,
+          "name": "sync_row_is_tombstone",
+          "type": "bit(1)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "last_change_datetime": {
+          "autoincrement": false,
+          "name": "last_change_datetime",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "Users_tracking_Id": {
+          "name": "Users_tracking_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "WorkTeams": {
+      "name": "WorkTeams",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Name": {
+          "autoincrement": false,
+          "name": "Name",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Code": {
+          "autoincrement": false,
+          "name": "Code",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "HoursPerDay": {
+          "default": 0,
+          "autoincrement": false,
+          "name": "HoursPerDay",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "WorkTeams_Id": {
+          "name": "WorkTeams_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "__EFMigrationsHistory": {
+      "name": "__EFMigrationsHistory",
+      "columns": {
+        "MigrationId": {
+          "autoincrement": false,
+          "name": "MigrationId",
+          "type": "varchar(95)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ProductVersion": {
+          "autoincrement": false,
+          "name": "ProductVersion",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {},
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "__EFMigrationsHistoryOld": {
+      "name": "__EFMigrationsHistoryOld",
+      "columns": {
+        "MigrationId": {
+          "autoincrement": false,
+          "name": "MigrationId",
+          "type": "varchar(95)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ProductVersion": {
+          "autoincrement": false,
+          "name": "ProductVersion",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "compositePrimaryKeys": {
+        "__EFMigrationsHistoryOld_MigrationId": {
+          "name": "__EFMigrationsHistoryOld_MigrationId",
+          "columns": [
+            "MigrationId"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "scope_info_history": {
+      "name": "scope_info_history",
+      "columns": {
+        "sync_scope_id": {
+          "autoincrement": false,
+          "name": "sync_scope_id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sync_scope_name": {
+          "autoincrement": false,
+          "name": "sync_scope_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "scope_last_sync_timestamp": {
+          "autoincrement": false,
+          "name": "scope_last_sync_timestamp",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scope_last_sync_duration": {
+          "autoincrement": false,
+          "name": "scope_last_sync_duration",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "scope_last_sync": {
+          "autoincrement": false,
+          "name": "scope_last_sync",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "scope_info_history_sync_scope_id": {
+          "name": "scope_info_history_sync_scope_id",
+          "columns": [
+            "sync_scope_id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "scope_info_server": {
+      "name": "scope_info_server",
+      "columns": {
+        "sync_scope_name": {
+          "autoincrement": false,
+          "name": "sync_scope_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sync_scope_schema": {
+          "autoincrement": false,
+          "name": "sync_scope_schema",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sync_scope_setup": {
+          "autoincrement": false,
+          "name": "sync_scope_setup",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sync_scope_version": {
+          "autoincrement": false,
+          "name": "sync_scope_version",
+          "type": "varchar(10)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sync_scope_last_clean_timestamp": {
+          "autoincrement": false,
+          "name": "sync_scope_last_clean_timestamp",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "scope_info_server_sync_scope_name": {
+          "name": "scope_info_server_sync_scope_name",
+          "columns": [
+            "sync_scope_name"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraint": {}
+    },
+    "sys_FileMigrations": {
+      "name": "sys_FileMigrations",
+      "columns": {
+        "Id": {
+          "autoincrement": true,
+          "name": "Id",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "FileName": {
+          "autoincrement": false,
+          "name": "FileName",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "FileModificationDT": {
+          "autoincrement": false,
+          "name": "FileModificationDT",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "MigrationDT": {
+          "autoincrement": false,
+          "name": "MigrationDT",
+          "type": "datetime",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "compositePrimaryKeys": {
+        "sys_FileMigrations_Id": {
+          "name": "sys_FileMigrations_Id",
+          "columns": [
+            "Id"
+          ]
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "uniqueConstraints": {
+        "idx_FileMigrations_FileName": {
+          "name": "idx_FileMigrations_FileName",
+          "columns": [
+            "FileName"
+          ]
+        }
+      },
+      "checkConstraint": {}
+    }
+  },
+  "views": {
+    "EqRepairJournalView": {
+      "columns": {
+        "AssetName": {
+          "autoincrement": false,
+          "name": "AssetName",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "AssetClassDescription": {
+          "autoincrement": false,
+          "name": "AssetClassDescription",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "AssetTypeName": {
+          "autoincrement": false,
+          "name": "AssetTypeName",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "isExisting": false,
+      "name": "EqRepairJournalView",
+      "algorithm": "undefined",
+      "definition": "select `a`.`Name` AS `AssetName`,`ac`.`Description` AS `AssetClassDescription`,`at`.`Name` AS `AssetTypeName` from (((`infrastructure`.`EqRepairJournal` `st` left join `inventory`.`Assets` `a` on((`st`.`AssetId` = `a`.`Id`))) left join `inventory`.`AssetClasses` `ac` on((`st`.`AssetClassId` = `ac`.`Id`))) left join `inventory`.`AssetTypes` `at` on((`st`.`AssetTypeId` = `at`.`Id`)))",
+      "sqlSecurity": "definer"
+    },
+    "UserEmploymentJournalView": {
+      "columns": {
+        "OrderDocumentDocNumber": {
+          "autoincrement": false,
+          "name": "OrderDocumentDocNumber",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "TaskDescription": {
+          "autoincrement": false,
+          "name": "TaskDescription",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Id": {
+          "autoincrement": false,
+          "name": "Id",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "UserId": {
+          "autoincrement": false,
+          "name": "UserId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "OrgUnitId": {
+          "autoincrement": false,
+          "name": "OrgUnitId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "LocationId": {
+          "autoincrement": false,
+          "name": "LocationId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "OrderDocumentId": {
+          "autoincrement": false,
+          "name": "OrderDocumentId",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "TaskId": {
+          "autoincrement": false,
+          "name": "TaskId",
+          "type": "binary(16)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "PeriodBegin": {
+          "autoincrement": false,
+          "name": "PeriodBegin",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "PeriodEnd": {
+          "autoincrement": false,
+          "name": "PeriodEnd",
+          "type": "datetime(6)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Description": {
+          "autoincrement": false,
+          "name": "Description",
+          "type": "longtext",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "RecordAuthorId": {
+          "autoincrement": false,
+          "name": "RecordAuthorId",
+          "type": "int",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "isExisting": false,
+      "name": "UserEmploymentJournalView",
+      "algorithm": "undefined",
+      "definition": "select `dn`.`DocNumber` AS `OrderDocumentDocNumber`,`ac`.`Description` AS `TaskDescription`,`ms`.`Id` AS `Id`,`ms`.`UserId` AS `UserId`,`ms`.`OrgUnitId` AS `OrgUnitId`,`ms`.`LocationId` AS `LocationId`,`ms`.`OrderDocumentId` AS `OrderDocumentId`,`ms`.`TaskId` AS `TaskId`,`ms`.`PeriodBegin` AS `PeriodBegin`,`ms`.`PeriodEnd` AS `PeriodEnd`,`ms`.`Description` AS `Description`,`ms`.`RecordAuthorId` AS `RecordAuthorId` from ((`hr`.`UserEmploymentJournals` `ms` left join `docworkflow`.`OrderDocuments` `dn` on((`ms`.`OrderDocumentId` = `dn`.`Id`))) left join `infrastructure`.`Tasks` `ac` on((`ms`.`TaskId` = `ac`.`Id`)))",
+      "sqlSecurity": "definer"
+    }
+  },
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "tables": {},
+    "indexes": {}
+  }
+}
