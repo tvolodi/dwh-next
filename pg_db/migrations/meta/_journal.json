@@ -22,6 +22,13 @@
       "when": 1734520633715,
       "tag": "0002_needy_inertia",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1734592925177,
+      "tag": "0003_parallel_lightspeed",
+      "breakpoints": true
     }
   ]
 }

@@ -18,16 +18,22 @@ import { InputText } from "primereact/inputtext";
 
 export function MasterDetails({fullEntityName}) {
 
-    console.log("MasterDetails: ", fullEntityName);
+    console.log("MasterDetails fullEntityName: ", fullEntityName);
 
     if(fullEntityName === undefined || fullEntityName === null || fullEntityName === "") {
         return;
     }
 
+
+
     const dbSchemaName = fullEntityName?.split("_")[0];
     const entityName = fullEntityName?.split("_")[1];
 
-    const [dataGridSchema, setDataGridSchema] = React.useState({})
+    const [dataGridSchema, setDataGridSchema] = React.useState({
+        showDetails: false,
+        items: {}
+    })
+
 
     const [selectedData, setSelectedData] = React.useState({});
     const [ multiSortMeta, setMultiSortMeta ] = React.useState(null);
@@ -39,10 +45,12 @@ export function MasterDetails({fullEntityName}) {
 
     const [ globalStringFilter, setGlobalStringFilter ] = React.useState("");
 
-    
+
 
     React.useEffect(() => {
         
+        console.log("MasterDetails useEffect. dataGridSchema", dataGridSchema);
+
         const loadData = async () => {
 
             // get dataSchema for the form if it is not loaded yet
@@ -50,6 +58,7 @@ export function MasterDetails({fullEntityName}) {
             let listSchema = dataGridSchema;
 
             try {
+                console.log(`Try to load schema for ${dbSchemaName}/${entityName}.list.js`);
                 const listSchemaModule = await import(`../lib/schemas/${dbSchemaName}/${entityName}.list.js`)
                 listSchema = listSchemaModule.schema;
                 console.log("listSchema: ", listSchema);
@@ -92,27 +101,40 @@ export function MasterDetails({fullEntityName}) {
             }
 
             console.log(`fullEntityName before fetch: `, fullEntityName);
-            const result = await fetch(`/api/getEntityItems?fullEntityName=${fullEntityName}`, {
+            try{
+                const result = await fetch(`/api/getEntityItems?fullEntityName=${fullEntityName}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(reqBody),
                 });
-            const data = await result.json();
+                const data = await result.json();
 
-            console.log("DataTable Data: ", data);
-            setData(data)
-            if (data.length > 0 && Object.keys(selectedData).length === 0) {
-                // Set position on the first row
-                setSelectedData(data[0]);
-            } else {
-                // Clear old data
+                console.log("DataTable Data: ", data);
+                setData(data)
+                if (data.length > 0 && Object.keys(selectedData).length === 0) {
+                    // Set position on the first row
+                    setSelectedData(data[0]);
+                } else {
+                    // Clear old data
+                    setSelectedData({});
+                }
+                setIsListUpdateRequired(false);
+            } catch (error) {
+                console.log("Error fetching data table data: ", error);
+                setData([]);
                 setSelectedData({});
             }
-            setIsListUpdateRequired(false);
+
         }
         loadData();
             
     }, [isListUpdateRequired, fullEntityName]);
+
+    // return (
+    //     <div>
+    //         <h1>MasterDetails</h1>
+    //     </div>
+    // )
 
     const onGlobalStringFilterChange = (e) => {
         setGlobalStringFilter(e.target.value);
@@ -140,6 +162,42 @@ export function MasterDetails({fullEntityName}) {
         </React.Fragment>
     )
 
+    console.log("dataGridSchema before rendering: ", dataGridSchema);
+
+    if(dataGridSchema === undefined || dataGridSchema === null || Object.keys(dataGridSchema).length === 0) {
+        return <div>Loading...</div>
+    }
+    //  else {
+    //     return (
+    //         <>
+    //             {/* <pre>JSON.stringify({dataGridSchema})</pre> */}
+    //             <div>Under construction</div>
+    //         </>
+            
+    //     )
+    // }
+
+    function DetailsPanel() {
+        console.log("dataGridSchema.showDetails: ", dataGridSchema.showDetails);
+        if(dataGridSchema.showDetails === true) {
+            return(
+                
+                <Card>
+                    <Details 
+                        data={selectedData} 
+                        setData={setSelectedData}
+                        setIsListUpdateRequired={setIsListUpdateRequired}
+                        fullEntityName={fullEntityName} 
+                        pageModeParam={detailsFormMode} 
+                        setDetailsFormMode={setDetailsFormMode}
+                        />
+                </Card>
+            )}
+            else {
+                return null;
+            }
+    }
+
   return (
     <div>
           <Splitter style={{ height: "800px", width: "1200px" }}>
@@ -147,7 +205,7 @@ export function MasterDetails({fullEntityName}) {
                   <div className="card">
                       <Toolbar start={toolbarLeft}></Toolbar>
                       <Button onClick={() => {                          
-                            }}>Refresh</Button>
+                            }}>Refresh</Button>                            
                       <DataTable  
                           selectionMode={"single"}
                           selection={selectedData}
@@ -179,8 +237,8 @@ export function MasterDetails({fullEntityName}) {
                           }}
                           dataKey="Id"
                       >
-                        { Object.keys(dataGridSchema).map((key, i) => {
-                            const colParamValues = dataGridSchema[key];
+                        { Object.keys(dataGridSchema.items).map((key, i) => {
+                            const colParamValues = dataGridSchema.items[key];
                             return (
                                 <Column 
                                     field={key} 
@@ -193,20 +251,27 @@ export function MasterDetails({fullEntityName}) {
                       </DataTable>
                   </div>
               </SplitterPanel>
-              <SplitterPanel className="flex" size={10} minSize={6} style={{ overflow: 'auto' }}>
-
-                    <Card>
-                        <Details 
-                            data={selectedData} 
-                            setData={setSelectedData}
-                            setIsListUpdateRequired={setIsListUpdateRequired}
-                            fullEntityName={fullEntityName} 
-                            pageModeParam={detailsFormMode} 
-                            setDetailsFormMode={setDetailsFormMode}
-                            />
-                  </Card>
-
+              <SplitterPanel className="flex" size={10} minSize={6} style={{ overflow: 'auto' }} hidden={dataGridSchema.showDetails === false}>
+                { (dataGridSchema.showDetails === true) ? 
+                      <Card>
+                          <Details
+                              data={selectedData}
+                              setData={setSelectedData}
+                              setIsListUpdateRequired={setIsListUpdateRequired}
+                              fullEntityName={fullEntityName}
+                              pageModeParam={detailsFormMode}
+                              setDetailsFormMode={setDetailsFormMode}
+                          />
+                      </Card>
+                 : null }
               </SplitterPanel>
+              {/* {dataGridSchema.showDetails ?
+                <SplitterPanel className="flex" size={10} minSize={6} style={{ overflow: 'auto' }}>
+
+
+                </SplitterPanel>
+                : null
+            } */}
           </Splitter>
     </div>
   );

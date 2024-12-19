@@ -4,3 +4,15 @@ export enum PageMode {
     DELETE = "delete",
     VIEW = "view",
 }
+
+export enum EtlProcessConfigStatus {
+    ENABLED = "enabled",
+    DISABLED = "disabled",
+}
+
+export enum EtlProcessStatus {
+    SCHEDULED = "scheduled",
+    RUNNING = "running",
+    COMPLETED = "completed",
+    FAILED = "failed",    
+}
