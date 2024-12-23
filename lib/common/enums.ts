@@ -16,3 +16,14 @@ export enum EtlProcessStatus {
     COMPLETED = "completed",
     FAILED = "failed",    
 }
+
+export enum TransformationDescriptionTypes {
+    JS = "js",
+    PSEUDO_JS = "pseudo_js",
+    SQL = "sql",
+    PYTHON = "python",
+    SHELL = "shell",
+    JSON = "json",
+    XML = "xml",
+    
+}

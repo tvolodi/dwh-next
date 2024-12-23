@@ -1,0 +1,636 @@
+{
+  "id": "d7676234-49e1-4bfa-8629-b7327925cf6d",
+  "prevId": "2329134c-0e38-4714-99e0-daabf3987d50",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "core.OrgUnits": {
+      "name": "OrgUnits",
+      "schema": "core",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "BIN": {
+          "name": "BIN",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CodeFromExtAcctSys": {
+          "name": "CodeFromExtAcctSys",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Description": {
+          "name": "Description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ExternalId": {
+          "name": "ExternalId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Group": {
+          "name": "Group",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "KBE": {
+          "name": "KBE",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ParentId": {
+          "name": "ParentId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Prefix": {
+          "name": "Prefix",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "OrgUnits_ParentId_OrgUnits_Id_fk": {
+          "name": "OrgUnits_ParentId_OrgUnits_Id_fk",
+          "tableFrom": "OrgUnits",
+          "tableTo": "OrgUnits",
+          "schemaTo": "core",
+          "columnsFrom": [
+            "ParentId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "OrgUnits_BIN_unique": {
+          "name": "OrgUnits_BIN_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "BIN"
+          ]
+        },
+        "OrgUnits_Code_unique": {
+          "name": "OrgUnits_Code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Code"
+          ]
+        },
+        "OrgUnits_ExternalId_unique": {
+          "name": "OrgUnits_ExternalId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "ExternalId"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "dwh-meta.DwhConfigs": {
+      "name": "DwhConfigs",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ParamValue": {
+          "name": "ParamValue",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ExtendedValue": {
+          "name": "ExtendedValue",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "DwhConfigs_Code_unique": {
+          "name": "DwhConfigs_Code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "dwh-meta.Entities": {
+      "name": "Entities",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ModuleId": {
+          "name": "ModuleId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Entities_ModuleId_Modules_Id_fk": {
+          "name": "Entities_ModuleId_Modules_Id_fk",
+          "tableFrom": "Entities",
+          "tableTo": "Modules",
+          "schemaTo": "dwh-meta",
+          "columnsFrom": [
+            "ModuleId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Entities_Code_unique": {
+          "name": "Entities_Code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "dwh-meta.EtlProcessConfigs": {
+      "name": "EtlProcessConfigs",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "EtlProcessTypeId": {
+          "name": "EtlProcessTypeId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "EtlProcessScript": {
+          "name": "EtlProcessScript",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ProcedureName": {
+          "name": "ProcedureName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ProcedureParams": {
+          "name": "ProcedureParams",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "CronSchedule": {
+          "name": "CronSchedule",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "TransformationOptions": {
+          "name": "TransformationOptions",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ProcessStatus": {
+          "name": "ProcessStatus",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "IsDeleted": {
+          "name": "IsDeleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "EtlProcessConfigs_EtlProcessTypeId_EtlProcessTypes_Id_fk": {
+          "name": "EtlProcessConfigs_EtlProcessTypeId_EtlProcessTypes_Id_fk",
+          "tableFrom": "EtlProcessConfigs",
+          "tableTo": "EtlProcessTypes",
+          "schemaTo": "dwh-meta",
+          "columnsFrom": [
+            "EtlProcessTypeId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "EtlProcessConfigs_Code_unique": {
+          "name": "EtlProcessConfigs_Code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "dwh-meta.EtlProcessJournal": {
+      "name": "EtlProcessJournal",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "EtlProcessId": {
+          "name": "EtlProcessId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "StartedAt": {
+          "name": "StartedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "FinishedAt": {
+          "name": "FinishedAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Status": {
+          "name": "Status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "EtlProcessJournal_EtlProcessId_EtlProcessConfigs_Id_fk": {
+          "name": "EtlProcessJournal_EtlProcessId_EtlProcessConfigs_Id_fk",
+          "tableFrom": "EtlProcessJournal",
+          "tableTo": "EtlProcessConfigs",
+          "schemaTo": "dwh-meta",
+          "columnsFrom": [
+            "EtlProcessId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "dwh-meta.EtlProcessTypes": {
+      "name": "EtlProcessTypes",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "EtlProcessTypes_Code_unique": {
+          "name": "EtlProcessTypes_Code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "dwh-meta.EtlTransformMappings": {
+      "name": "EtlTransformMappings",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "EtlProcessId": {
+          "name": "EtlProcessId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "StepNumber": {
+          "name": "StepNumber",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Script": {
+          "name": "Script",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TransformationDescriptionType": {
+          "name": "TransformationDescriptionType",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TargetTable": {
+          "name": "TargetTable",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TargetSchema": {
+          "name": "TargetSchema",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TargetColumn": {
+          "name": "TargetColumn",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "EtlTransformMappings_EtlProcessId_EtlProcessConfigs_Id_fk": {
+          "name": "EtlTransformMappings_EtlProcessId_EtlProcessConfigs_Id_fk",
+          "tableFrom": "EtlTransformMappings",
+          "tableTo": "EtlProcessConfigs",
+          "schemaTo": "dwh-meta",
+          "columnsFrom": [
+            "EtlProcessId"
+          ],
+          "columnsTo": [
+            "Id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "dwh-meta.LastProcessedRecords": {
+      "name": "LastProcessedRecords",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "SchemaName": {
+          "name": "SchemaName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "TableName": {
+          "name": "TableName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "LastProcessedId": {
+          "name": "LastProcessedId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "LastProcessedUuid": {
+          "name": "LastProcessedUuid",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "LastDT": {
+          "name": "LastDT",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "dwh-meta.Modules": {
+      "name": "Modules",
+      "schema": "dwh-meta",
+      "columns": {
+        "Id": {
+          "name": "Id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "Code": {
+          "name": "Code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Name": {
+          "name": "Name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Notes": {
+          "name": "Notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Modules_Code_unique": {
+          "name": "Modules_Code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Code"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {
+    "core": "core",
+    "dwh-meta": "dwh-meta"
+  },
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

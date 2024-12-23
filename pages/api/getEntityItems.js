@@ -1,5 +1,5 @@
 import { db } from '@/lib/db/drizzle';
-import { eq, like, ilike, or } from "drizzle-orm";
+import { and, eq, like, ilike, or } from "drizzle-orm";
 
 import * as dbSchema from '@/lib/schemas/pg_db/schema';
 import { meta_Module } from '@/lib/schemas/pg_db/schema';
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
 
     // return res.status(200).json(qResult);
 
-    const fullEntityName = req.query.fullEntityName;
+    const fullEntityName = req.query.fullEntityName;    
     if(!fullEntityName) {
         return res.status(500).send("fullEntityName query parameter is required");
     }
@@ -71,6 +71,8 @@ export default async function handler(req, res) {
     // console.log("API: entity: ", entity);    
 
     const method = req.method;
+
+    const includeDeleted = req.query.includeDeleted;
 
     console.log("API: method: ", method);
 
@@ -143,8 +145,18 @@ export default async function handler(req, res) {
                                 searchExpressionArr.push(filterExpression);
                             }
                         })
-                    }
+                    }                    
                     filter.where = or(...searchExpressionArr);                    
+                }
+
+                // Add global filter on deleted records
+                // If an Entity has IsDeleted field, then it is used to filter out deleted records only if includeDeleted is not set directly in the filter
+                if(entity.IsDeleted) {
+                    if(includeDeleted) {
+                        filter.where = and(filter.where, eq(entity.IsDeleted, true));
+                    } else {
+                        filter.where = and(filter.where, eq(entity.IsDeleted, false));
+                    }
                 }
 
                 console.log(`filter:`, filter);

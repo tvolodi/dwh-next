@@ -15,7 +15,7 @@ export default async function handler(req, res) {
         return res.status(500).send("fullEntityName query parameter is required");
     }
 
-    const fullEntityNameParts = (fullEntityName).split(".");
+    const fullEntityNameParts = (fullEntityName).split("_");
     const dbSchemaName = fullEntityNameParts[0];
     const entityName = fullEntityNameParts[1];
     // console.log("API: dbSchema: ", dbSchemaName);
@@ -38,9 +38,9 @@ export default async function handler(req, res) {
         console.log(`Error from import custom module ${moduleName} for ${method} method: `);
     }
 
-    console.log(`Entity name: ${entityName}`);
+    console.log(`Entity name: ${fullEntityName}`);
 
-    const entity = dbSchema[entityName];
+    const entity = dbSchema[fullEntityName];
 
     // Standard processing
 
@@ -59,14 +59,14 @@ export default async function handler(req, res) {
                 const dbResult = await db.insert(entity).values(reqBody).returning();
                 console.log("API: Method: POST:  result", dbResult);
 
-                if(result.length > 0) {
+                if(dbResult.length > 0) {
                     return res.status(200).json(dbResult[0]);
                 }
                 return res.status(200).send({});
                 
             } catch (err) {
                 console.log("Error: ", err);
-                return res.status(500).send(`Error inserting entity ${entityName} -> ${err}`);
+                return res.status(500).send(`Error inserting entity ${fullEntityName} -> ${err}`);
             }
             break;
 
@@ -84,7 +84,7 @@ export default async function handler(req, res) {
 
             } catch (err) {
                 console.error("Error: ", err);
-                return res.status(500).send(`Error updating entity ${entityName} -> ${err}`);
+                return res.status(500).send(`Error updating entity ${fullEntityName} -> ${err}`);
             }
             break;
         
@@ -100,7 +100,7 @@ export default async function handler(req, res) {
 
             } catch (err) {
                 console.error("Error: ", err);
-                return res.status(500).send(`Error to delete entity ${entityName} -> ${err}`);
+                return res.status(500).send(`Error to delete entity ${fullEntityName} -> ${err}`);
             }
             break;
     }
